@@ -28,8 +28,11 @@ CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,                    
 FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
-INSERT INTO `agora`.`users` (`UserID`, `UserName`, `Email`, `UserPassword`, `UserType`) VALUES ('1', 'antoine', 'antoine.lallement@edu.ece.fr', 'chaville', 'Admin');
+INSERT INTO `agora`.`Users` (`UserName`, `Email`, `UserPassword`, `UserType`)
+VALUES
+('antoine', 'antoine.lallement@edu.ece.fr', 'chaville', 'Admin'),
+('jules', 'jules.kounde@edu.ece.fr', 'foot', 'Seller');
 
-INSERT INTO `agora`.`users` (`UserID`, `UserName`, `Email`, `UserPassword`, `UserType`) VALUES ('2', 'jules', 'jules.kounde@edu.ece.fr', 'foot', 'Seller');
-
-INSERT INTO `agora`.`articles` (`ArticleID`, `ArticleName`, `Description`, `Price`, `ImageURL`, `VideoURL`, `Quality`, `Stock`, `UserID`, `ItemType`, `CreatedAt`, `UpdatedAt`) VALUES ('1', 'Chaise Bois', 'Chaise en bois en jaune, artistique et ergonomique elle conviendra a des cuisines atypiques mais pas aux incomprehensifs face a l''art.', '1599.99', 'images/chaiseboisjaune.png', NULL, 'Neuf', '1', '2', 'Articles rares', '2024-05-20 06:19:21', '2024-05-21 05:21:27');
+INSERT INTO `agora`.`Articles` (`ArticleName`, `Description`, `TypeVente`, `Price`, `ImageURL`, `VideoURL`, `Quality`, `Stock`, `UserID`, `ItemType`, `CreatedAt`, `UpdatedAt`)
+VALUES
+('Chaise Bois', 'Chaise en bois en jaune, artistique et ergonomique elle conviendra a des cuisines atypiques mais pas aux incomprehensifs face a l''art.', 'Immediat', '1599.99', 'images/chaiseboisjaune.png', NULL, 'Neuf', '1', '2', 'Articles rares', '2024-05-20 06:19:21', '2024-05-21 05:21:27');
