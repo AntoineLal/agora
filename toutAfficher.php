@@ -12,7 +12,7 @@
 </header>
 <nav>
     <a href="accueil.html">Accueil</a>
-    <a href="toutAfficher.php">Tout Parcourir</a>
+    <a href="toutAfficher.html">Tout Parcourir</a>
     <a href="#notifications">Notifications</a>
     <a href="#panier">Panier</a>
     <a href="compte.html">Votre Compte</a>
@@ -25,8 +25,8 @@
 <div id="footer">
     <p>&copy; 2024 Agora Francia. Tous droits réservés.</p>
     <p>
-        <a href="mentions-legales.html">Mentions légales</a> |
-        <a href="confidentialie.html">Politique de confidentialité</a> |
+        <a href="#mentions-legales">Mentions légales</a> |
+        <a href="#politique-confidentialite">Politique de confidentialité</a> |
         <a href="#contact">Contact</a>
     </p>
 </div>
