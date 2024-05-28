@@ -1,5 +1,6 @@
 <?php
-session_start();
+session_start(); // Démarrer la session
+include 'config.php'; // Fichier contenant les informations de connexion à la base de données
 
 $servername = "localhost";
 $username = "root";
@@ -15,7 +16,8 @@ if ($conn->connect_error) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $article_id = intval($_POST["article_id"]);
     $quantity = intval($_POST["quantity"]);
-    $user_id = $_SESSION['UserID']; // Assurez-vous que l'utilisateur est connecté et que l'ID utilisateur est stocké dans la session
+    $user_id = $_SESSION['user_id'];
+
 
     $sql_check = "SELECT * FROM Panier WHERE UserID = $user_id AND Status = 'En cours'";
     $result_check = $conn->query($sql_check);

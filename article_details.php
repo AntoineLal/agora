@@ -31,7 +31,7 @@
     <h1>Détails de l'article - Agora Francia</h1>
 </header>
 <nav>
-    <a href="accueil.html">Accueil</a>
+    <a href="accueil.php">Accueil</a>
     <a href="toutAfficher.php">Tout Parcourir</a>
     <a href="#notifications">Notifications</a>
     <a href="panier.php">Panier</a>

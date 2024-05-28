@@ -7,11 +7,7 @@
     <link rel="stylesheet" href="style1.css">
     <style>
         .thumbnail-image {
-<<<<<<< HEAD
-            width: 250px; /* Taille de l'image */
-=======
             width: 250px; 
->>>>>>> cc7b59e37e281527634bb69d067445ce656d482e
             height: 250px;
         }
         <style>
@@ -31,7 +27,7 @@
     <h1>Tout Parcourir - Agora Francia</h1>
 </header>
 <nav>
-    <a href="accueil.html">Accueil</a>
+    <a href="accueil.php">Accueil</a>
     <a href="toutAfficher.php">Tout Parcourir</a>
     <a href="#notifications">Notifications</a>
     <a href="panier.php">Panier</a>
@@ -83,8 +79,8 @@
 <footer id="footer">
     <p>&copy; 2024 Agora Francia. Tous droits réservés.</p>
     <p>
-        <a href="#mentions-legales">Mentions légales</a> |
-        <a href="#politique-confidentialite">Politique de confidentialité</a> |
+        <a href="mentions-legales.html">Mentions légales</a> |
+        <a href="confidentialie.html">Politique de confidentialité</a> |
         <a href="#contact">Contact</a>
     </p>
 </footer>
