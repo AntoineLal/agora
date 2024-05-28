@@ -7,9 +7,19 @@
     <link rel="stylesheet" href="style1.css">
     <style>
         .thumbnail-image {
-            width: 250px;
+            width: 250px; 
             height: 250px;
         }
+        <style>
+        .description {
+            max-width: 200px;
+            word-wrap: break-word; 
+        }
+        .article-image {
+            width: 400px;
+            height: 400px;
+        }
+    </style>
     </style>
 </head>
 <body>
@@ -19,7 +29,6 @@
 <nav>
     <a href="accueil.html">Accueil</a>
     <a href="toutAfficher.php">Tout Parcourir</a>
-    <!-- Ajoutez d'autres liens de navigation si nécessaire -->
     <a href="#notifications">Notifications</a>
     <a href="#panier">Panier</a>
     <a href="compte.html">Votre Compte</a>
@@ -27,7 +36,6 @@
 <div class="content">
     <h2>Tous les articles</h2>
     <div class="article-thumbnails">
-        <!-- Utiliser du code PHP pour afficher les vignettes des articles -->
         <?php
         // Connexion à la base de données
         $servername = "localhost";
@@ -43,18 +51,19 @@
         }
 
         // Requête SQL pour récupérer les informations sur les articles
-        $sql = "SELECT ArticleName, Description, Price, ImageURL FROM Articles";
+        $sql = "SELECT ArticleID, ArticleName, Description, Price, ImageURL FROM Articles";
         $result = $conn->query($sql);
 
         // Si des articles sont trouvés, afficher leurs vignettes
         if ($result->num_rows > 0) {
             // Boucle sur chaque ligne de résultat
             while($row = $result->fetch_assoc()) {
-                // Afficher la vignette de l'article
+                // Afficher la vignette de l'article avec un lien vers la page de détails
                 echo '<div class="article-thumbnail">';
+                echo '<a href="article_details.php?article_id=' . $row["ArticleID"] . '">';
                 echo '<img class="thumbnail-image" src="' . $row["ImageURL"] . '" alt="' . $row["ArticleName"] . '">';
+                echo '</a>';
                 echo '<h3>' . $row["ArticleName"] . '</h3>';
-                echo '<p>' . $row["Description"] . '</p>';
                 echo '<p>Prix : ' . $row["Price"] . '€</p>';
                 echo '</div>';
             }
@@ -67,13 +76,13 @@
         ?>
     </div>
 </div>
-<div id="footer">
+<footer id="footer">
     <p>&copy; 2024 Agora Francia. Tous droits réservés.</p>
     <p>
         <a href="#mentions-legales">Mentions légales</a> |
         <a href="#politique-confidentialite">Politique de confidentialité</a> |
         <a href="#contact">Contact</a>
     </p>
-</div>
+</footer>
 </body>
 </html>
