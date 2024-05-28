@@ -1,54 +1,19 @@
-document.getElementById('createAccountLink').addEventListener('click', function(e) {
+document.getElementById('registerForm').addEventListener('submit', function(e) {
+    // Empêcher l'envoi du formulaire par défaut
     e.preventDefault();
-    document.querySelector('.container h2').textContent = 'Créer un compte';
-    document.getElementById('loginForm').innerHTML = `
-        <label for="name">Nom :</label>
-        <input type="text" id="name" name="name" required>
-        <label for="email">Email :</label>
-        <input type="email" id="email" name="email" required>
-        <label for="password">Mot de passe :</label>
-        <input type="password" id="password" name="password" required>
-        <button type="submit" id="submitForm">Créer un compte</button>
-    `;
-    document.querySelector('.toggle-link').innerHTML = `
-        <a href="#" id="loginLink">Déjà un compte ? Se connecter</a>
-    `;
-    document.getElementById('loginLink').addEventListener('click', function(e) {
-        e.preventDefault();
-        document.querySelector('.container h2').textContent = 'Connexion';
-        document.getElementById('loginForm').innerHTML = `
-            <label for="login_email">Email :</label>
-            <input type="email" id="login_email" name="login_email" required>
-            <label for="login_password">Mot de passe :</label>
-            <input type="password" id="login_password" name="login_password" required>
-            <button type="submit" id="submitLoginForm">Se connecter</button>
-        `;
-        document.querySelector('.toggle-link').innerHTML = `
-            <a href="#" id="createAccountLink">Créer un compte</a>
-        `;
-    });
-});
 
-document.addEventListener('submit', function(e) {
-    if (e.target && e.target.id == 'submitLoginForm') {
-        e.preventDefault();
-        var formData = new FormData(document.getElementById('loginForm'));
-        fetch('traitement.php', {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => response.text())
-            .then(data => {
-                if (data === "Connecté avec succès") {
-                    // Rediriger l'utilisateur vers une nouvelle page ou effectuer d'autres actions
-                    console.log(data);
-                } else {
-                    // Afficher le message d'erreur à l'utilisateur
-                    alert(data);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+    // Récupérer les valeurs des champs
+    var username = document.getElementById('username').value;
+    var email = document.getElementById('email').value;
+    var password = document.getElementById('password').value;
+    var usertype = document.getElementById('usertype').value;
+
+    // Vérifier si les champs ne sont pas vides
+    if (username && email && password && usertype) {
+        // Envoyer les données du formulaire au serveur
+        this.submit();
+    } else {
+        // Afficher un message d'erreur si des champs sont vides
+        alert('Veuillez remplir tous les champs.');
     }
 });

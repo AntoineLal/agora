@@ -1,10 +1,20 @@
 <?php
-// Connexion à la base de données
+// Connexion à la base de données (à adapter selon votre configuration)
 $servername = "localhost";
-$username = "votre_nom_utilisateur";
-$password = "votre_mot_de_passe";
-$dbname = "votre_nom_base_de_données";
+$username = "root";
+$password = "";
+$dbname = "agora";
 
+// Récupération des données du formulaire
+$username = $_POST['username'];
+$email = $_POST['email'];
+$password = $_POST['password'];
+$usertype = $_POST['usertype'];
+
+// Génération d'un ID unique
+$userid = uniqid();
+
+// Connexion à la base de données
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Vérification de la connexion
@@ -12,20 +22,13 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Si le formulaire d'inscription est soumis
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['name']) && isset($_POST['email']) && isset($_POST['password'])) {
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+// Requête d'insertion des données dans la table Users
+$sql = "INSERT INTO Users (UserID, UserName, Email, UserPassword, UserType) VALUES ('$userid', '$username', '$email', '$password', '$usertype')";
 
-    // Insérer les données dans la table Users
-    $sql = "INSERT INTO Users (UserName, Email, UserPassword, UserType) VALUES ('$name', '$email', '$password', 'Buyer')";
-
-    if ($conn->query($sql) === TRUE) {
-        echo "Nouveau compte créé avec succès";
-    } else {
-        echo "Erreur: " . $sql . "<br>" . $conn->error;
-    }
+if ($conn->query($sql) === TRUE) {
+    echo "Compte créé avec succès !";
+} else {
+    echo "Erreur : " . $sql . "<br>" . $conn->error;
 }
 
 $conn->close();
