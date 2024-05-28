@@ -30,7 +30,7 @@
     <a href="accueil.html">Accueil</a>
     <a href="toutAfficher.php">Tout Parcourir</a>
     <a href="#notifications">Notifications</a>
-    <a href="#panier">Panier</a>
+    <a href="panier.php">Panier</a>
     <a href="compte.html">Votre Compte</a>
 </nav>
 <div class="content">
