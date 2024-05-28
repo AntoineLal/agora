@@ -86,3 +86,50 @@ nav a:hover {
 #footer a:hover {
     text-decoration: underline;
 }
+
+
+.carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.carousel-item {
+    min-width: 300px;
+    margin: 10px;
+    flex: 0 0 auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background: #fff;
+    border-radius: 5px;
+    text-align: left;
+}
+
+.carousel img {
+    max-width: 100%;
+    max-width: 200px;
+    max-height: 200px; /* Taille maximale de l'image */
+    display: block;
+    margin: 0 auto;
+}
+
+.carousel-controls {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.carousel-controls button {
+    padding: 10px;
+    margin: 0 5px;
+    border: none;
+    background: #007bff;
+    color: #fff;
+    cursor: pointer;
+}
+
+.carousel-controls button:hover {
+    background: #0056b3;
+}
