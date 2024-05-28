@@ -7,9 +7,23 @@
     <link rel="stylesheet" href="style1.css">
     <style>
         .thumbnail-image {
+<<<<<<< HEAD
             width: 250px; /* Taille de l'image */
+=======
+            width: 250px; 
+>>>>>>> cc7b59e37e281527634bb69d067445ce656d482e
             height: 250px;
         }
+        <style>
+        .description {
+            max-width: 200px;
+            word-wrap: break-word; 
+        }
+        .article-image {
+            width: 400px;
+            height: 400px;
+        }
+    </style>
     </style>
 </head>
 <body>
@@ -19,9 +33,8 @@
 <nav>
     <a href="accueil.html">Accueil</a>
     <a href="toutAfficher.php">Tout Parcourir</a>
-    <!-- Ajoutez d'autres liens de navigation si nécessaire -->
     <a href="#notifications">Notifications</a>
-    <a href="#panier">Panier</a>
+    <a href="panier.php">Panier</a>
     <a href="compte.html">Votre Compte</a>
 </nav>
 <div class="content">
