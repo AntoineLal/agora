@@ -19,6 +19,21 @@
             width: 400px;
             height: 400px;
         }
+        .article-thumbnail {
+            display: inline-block;
+            margin: 10px;
+            text-align: center;
+            width: 250px;
+        }
+        .thumbnail-image {
+            width: 100%; 
+            height: auto;
+            max-width: 250px;
+            max-height: 250px;
+        }
+        .article-info {
+            margin-top: 10px;
+        }
     </style>
     </style>
 </head>
