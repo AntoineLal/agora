@@ -67,6 +67,8 @@ $conn->close();
                     <p>Stock : <?php echo htmlspecialchars($article['Stock']); ?></p>
                     <p>Type de vente : <?php echo htmlspecialchars($article['TypeVente']); ?></p>
                     <p>Type d'article : <?php echo htmlspecialchars($article['ItemType']); ?></p>
+                    <a href="modifier_article.php?id=<?php echo $article['ArticleID']; ?>" class="btn">Modifier</a>
+                </div>
                 </div>
             <?php endforeach; ?>
         <?php else: ?>
