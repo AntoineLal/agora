@@ -35,18 +35,28 @@ if ($result->num_rows > 0) {
     <a href="accueil.php">Accueil</a>
     <a href="toutAfficher.php">Tout Parcourir</a>
     <a href="#notifications">Notifications</a>
-    <a href="#panier">Panier</a>
+
+    <?php if (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'buyer'): ?>
+        <a href="#panier">Panier</a>
+    <?php elseif (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'seller'): ?>
+        <a href="offres.php">Mes Offres</a>
+    <?php elseif (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'admin'): ?>
+        <a href="gestion.php">Gestion</a>
+    <?php endif; ?>
+
     <?php if (isset($_SESSION['user_id'])): ?>
         <a href="logout.php">Se déconnecter</a>
     <?php else: ?>
         <a href="login.html">Votre Compte</a>
     <?php endif; ?>
 </nav>
+
 <div class="content">
     <h2>Page d'accueil</h2>
     <?php if (isset($_SESSION['user_id'])): ?>
         <p>Bienvenue, <strong><?php echo htmlspecialchars($_SESSION['user_name']); ?></strong> !</p>
         <p>Email : <?php echo htmlspecialchars($_SESSION['user_email']); ?></p>
+        <p>Type de compte : <?php echo htmlspecialchars($_SESSION['usertype']); ?></p>
     <?php else: ?>
         <p>Bienvenue sur Agora Francia, votre plateforme de choix pour explorer et acheter des produits variés.</p>
         <p>Utilisez la navigation ci-dessus pour accéder aux différentes sections de notre site.</p>
