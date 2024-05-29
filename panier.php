@@ -70,7 +70,9 @@ if ($result->num_rows > 0) {
             <p><?php echo $total; ?> €</p>
         </div>
         <div class="checkout">
-            <button>Passer la commande</button>
+            <form action="payment.php" method="post">
+                <input type="submit" value="Passer la commande">
+            </form>
         </div>
     </div>
     <div id="footer">

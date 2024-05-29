@@ -22,10 +22,9 @@ if ($result->num_rows > 0) {
     <link rel="stylesheet" href="style1.css">
     <style>
         img {
-    max-width: 150px;
-    max-height: 150px;
-}
-
+            max-width: 150px;
+            max-height: 150px;
+        }
     </style>
 </head>
 <body>
@@ -55,20 +54,17 @@ if ($result->num_rows > 0) {
 
     <h2>Articles en vente</h2>
     <div class="carousel" id="carousel">
-        <?php foreach ($articles as $article): ?>
-            <div class="carousel-item">
+    <?php foreach ($articles as $article): ?>
+        <div class="carousel-item">
+            <a href="article_details.php?article_id=<?php echo htmlspecialchars($article['ArticleID']); ?>">
                 <h3><?php echo htmlspecialchars($article['ArticleName']); ?></h3>
                 <img src="<?php echo htmlspecialchars($article['ImageURL']); ?>" alt="<?php echo htmlspecialchars($article['ArticleName']); ?>">
-                
-                <p>Prix : <?php echo htmlspecialchars($article['Price']); ?> €</p>
-                <p>Vendu par : <?php echo htmlspecialchars($article['UserName']); ?></p>
-                <p>Qualité : <?php echo htmlspecialchars($article['Quality']); ?></p>
-            </div>
-        <?php endforeach; ?>
-    </div>
-    <div class="carousel-controls">
-        <button id="prev">Précédent</button>
-        <button id="next">Suivant</button>
+            </a>
+            <p>Prix : <?php echo htmlspecialchars($article['Price']); ?> €</p>
+            <p>Vendu par : <?php echo htmlspecialchars($article['UserName']); ?></p>
+            <p>Qualité : <?php echo htmlspecialchars($article['Quality']); ?></p>
+        </div>
+    <?php endforeach; ?>
     </div>
 </div>
 <div id="footer">
