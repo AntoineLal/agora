@@ -59,7 +59,7 @@ if ($result->num_rows > 0) {
             <div class="carousel-item">
                 <h3><?php echo htmlspecialchars($article['ArticleName']); ?></h3>
                 <img src="<?php echo htmlspecialchars($article['ImageURL']); ?>" alt="<?php echo htmlspecialchars($article['ArticleName']); ?>">
-                <p><?php echo htmlspecialchars($article['Description']); ?></p>
+                
                 <p>Prix : <?php echo htmlspecialchars($article['Price']); ?> €</p>
                 <p>Vendu par : <?php echo htmlspecialchars($article['UserName']); ?></p>
                 <p>Qualité : <?php echo htmlspecialchars($article['Quality']); ?></p>
