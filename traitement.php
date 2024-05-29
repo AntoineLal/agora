@@ -26,23 +26,37 @@ if (isset($_POST['login_email']) && isset($_POST['login_password'])) {
         $_SESSION['user_id'] = $user['UserID'];
         $_SESSION['user_name'] = $user['UserName'];
         $_SESSION['user_email'] = $user['Email'];
-        echo "Connecté avec succès";
+        // Redirection vers la page accueil.php
+        header("Location: accueil.php");
+        exit();
     } else {
         echo "Erreur de mot de passe ou d'email";
     }
-} elseif (isset($_POST['name']) && isset($_POST['email']) && isset($_POST['password'])) {
+} elseif (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['usertype'])) {
     // Gestion de la création de compte
-    $name = $_POST['name'];
+    $username = $_POST['username'];
     $email = $_POST['email'];
     $password = $_POST['password'];
+    $usertype = $_POST['usertype'];
+    $admincode = isset($_POST['admincode']) ? $_POST['admincode'] : '';
 
-    $sql = "INSERT INTO Users (UserName, Email, UserPassword, UserType) VALUES ('$name', '$email', '$password', 'Buyer')";
+    // Vérification du type de compte et du code admin
+    if ($usertype === 'admin') {
+        if ($admincode !== '0000') {
+            echo "Code admin incorrect.";
+            exit;
+        }
+    }
+
+    $sql = "INSERT INTO Users (UserName, Email, UserPassword, UserType) VALUES ('$username', '$email', '$password', '$usertype')";
     if ($conn->query($sql) === TRUE) {
         $user_id = $conn->insert_id;
         $_SESSION['user_id'] = $user_id;
-        $_SESSION['user_name'] = $name;
+        $_SESSION['user_name'] = $username;
         $_SESSION['user_email'] = $email;
-        echo "Compte créé avec succès";
+        // Redirection vers la page accueil.php
+        header("Location: accueil.php");
+        exit();
     } else {
         echo "Erreur : " . $sql . "<br>" . $conn->error;
     }

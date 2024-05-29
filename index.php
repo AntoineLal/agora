@@ -19,7 +19,7 @@ session_start();
         <a href="logout.php">Se déconnecter</a>
     <?php else: ?>
         <p>Vous n'êtes pas connecté.</p>
-        <a href="login.html">Se connecter</a> ou <a href="register.html">Créer un compte</a>
+        <a href="login.html">Se connecter</a> ou <a href="register.php">Créer un compte</a>
     <?php endif; ?>
 </div>
 </body>
