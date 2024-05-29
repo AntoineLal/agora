@@ -69,24 +69,12 @@ if ($result->num_rows > 0) {
             <a href="article_details.php?article_id=<?php echo htmlspecialchars($article['ArticleID']); ?>">
                 <h3><?php echo htmlspecialchars($article['ArticleName']); ?></h3>
                 <img src="<?php echo htmlspecialchars($article['ImageURL']); ?>" alt="<?php echo htmlspecialchars($article['ArticleName']); ?>">
-<<<<<<< HEAD
-                <p>Prix : <?php echo htmlspecialchars($article['Price']); ?> €</p>
-                <p>Vendu par : <?php echo htmlspecialchars($article['UserName']); ?></p>
-                <p>Qualité : <?php echo htmlspecialchars($article['Quality']); ?></p>
-            </div>
-        <?php endforeach; ?>
-    </div>
-    <div class="carousel-controls">
-        <button id="prev">Précédent</button>
-        <button id="next">Suivant</button>
-=======
             </a>
             <p>Prix : <?php echo htmlspecialchars($article['Price']); ?> €</p>
             <p>Vendu par : <?php echo htmlspecialchars($article['UserName']); ?></p>
             <p>Qualité : <?php echo htmlspecialchars($article['Quality']); ?></p>
         </div>
     <?php endforeach; ?>
->>>>>>> eebf845331c598e9f312dee69046f1db947c3ea0
     </div>
 </div>
 <div id="footer">
