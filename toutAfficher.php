@@ -10,7 +10,6 @@
             width: 250px; 
             height: 250px;
         }
-        <style>
         .description {
             max-width: 200px;
             word-wrap: break-word; 
@@ -24,6 +23,7 @@
             margin: 10px;
             text-align: center;
             width: 250px;
+            position: relative; /* Ajout d'une position relative pour permettre le positionnement du pseudo-élément */
         }
         .thumbnail-image {
             width: 100%; 
@@ -34,7 +34,21 @@
         .article-info {
             margin-top: 10px;
         }
-    </style>
+        /* Appliquer le filtre de désaturation sur les images lorsque le stock est épuisé */
+        .out-of-stock .thumbnail-image {
+            filter: grayscale(100%);
+        }
+        /* Ajouter des hachures diagonales lorsque le stock est épuisé */
+        .out-of-stock::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: repeating-linear-gradient(45deg, transparent, transparent 5px, #ccc 5px, #ccc 10px);
+            opacity: 0.7; /* Opacité des hachures */
+        }
     </style>
 </head>
 <body>
@@ -66,15 +80,19 @@
         }
 
         // Requête SQL pour récupérer les informations sur les articles
-        $sql = "SELECT ArticleID, ArticleName, Description, Price, ImageURL FROM Articles";
+        $sql = "SELECT ArticleID, ArticleName, Description, Price, ImageURL, Stock FROM Articles";
         $result = $conn->query($sql);
 
         // Si des articles sont trouvés, afficher leurs vignettes
         if ($result->num_rows > 0) {
             // Boucle sur chaque ligne de résultat
             while($row = $result->fetch_assoc()) {
+                // Vérifier si le stock est épuisé
+                $stock = $row["Stock"];
+                $out_of_stock_class = ($stock == 0) ? 'out-of-stock' : '';
+
                 // Afficher la vignette de l'article avec un lien vers la page de détails
-                echo '<div class="article-thumbnail">';
+                echo '<div class="article-thumbnail ' . $out_of_stock_class . '">';
                 echo '<a href="article_details.php?article_id=' . $row["ArticleID"] . '">';
                 echo '<img class="thumbnail-image" src="' . $row["ImageURL"] . '" alt="' . $row["ArticleName"] . '">';
                 echo '</a>';
