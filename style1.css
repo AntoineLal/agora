@@ -92,27 +92,37 @@ nav a:hover {
     display: flex;
     overflow-x: auto;
     scroll-behavior: smooth;
-    max-width: 100%;
-    margin: 0 auto;
+    white-space: nowrap; /* Empêcher le retour à la ligne */
 }
 
 .carousel-item {
     min-width: 300px;
     margin: 10px;
-    flex: 0 0 auto;
     border: 1px solid #ddd;
-    padding: 10px;
     background: #fff;
     border-radius: 5px;
-    text-align: left;
+    display: inline-block; /* Afficher les éléments en ligne */
+    vertical-align: top; /* Aligner les éléments en haut */
 }
 
 .carousel img {
-    max-width: 100%;
-    max-width: 200px;
-    max-height: 200px; /* Taille maximale de l'image */
-    display: block;
-    margin: 0 auto;
+    max-width: 100%; /* Taille maximale pour les images */
+    height: auto; /* Ajuster la hauteur automatiquement */
+    border-top-left-radius: 5px; /* Arrondir les coins de l'image */
+    border-top-right-radius: 5px;
+}
+
+.carousel-details {
+    padding: 10px;
+}
+
+.carousel-price {
+    font-weight: bold;
+    color: #007bff; /* Couleur du prix */
+}
+
+.carousel-description {
+    margin-top: 5px;
 }
 
 .carousel-controls {
@@ -120,16 +130,6 @@ nav a:hover {
     justify-content: center;
     margin-top: 10px;
 }
-
-.carousel-controls button {
-    padding: 10px;
-    margin: 0 5px;
-    border: none;
-    background: #007bff;
-    color: #fff;
-    cursor: pointer;
-}
-
-.carousel-controls button:hover {
-    background: #0056b3;
+#carousel-controls button:hover {
+    background-color: #0056b3; /* Changer la couleur de fond au survol */
 }
