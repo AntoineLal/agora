@@ -32,25 +32,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Par exemple, vous pouvez enregistrer les informations de paiement dans une table de commandes
     // et effectuer d'autres opérations telles que la validation du paiement avec un service de paiement tiers.
 
-    // Soustraire les quantités commandées des articles dans la table des articles
-    $sql_update_articles = "UPDATE Articles AS a
-                            INNER JOIN PanierArticles AS pa ON a.ArticleID = pa.ArticleID
-                            SET a.Stock = a.Stock - pa.Quantity
-                            WHERE pa.PanierID IN (SELECT PanierID FROM Panier WHERE UserID = $user_id)";
-    if ($conn->query($sql_update_articles) === TRUE) {
-        // Vider le panier du client
-        $sql_delete_panier = "DELETE FROM Panier WHERE UserID = $user_id";
-        if ($conn->query($sql_delete_panier) === TRUE) {
-            // Rediriger l'utilisateur vers la page de confirmation
-            header("Location: confirmation.php");
-            exit();
-        } else {
-            // Gérer l'échec de la suppression du panier
-            echo "Erreur lors de la suppression du panier: " . $conn->error;
-        }
+    // Vider le panier du client
+    $sql_delete_panier = "DELETE FROM Panier WHERE UserID = $user_id";
+    if ($conn->query($sql_delete_panier) === TRUE) {
+        // Rediriger l'utilisateur vers la page de confirmation
+        header("Location: confirmation.php");
+        exit();
     } else {
-        // Gérer l'échec de la mise à jour des quantités d'articles
-        echo "Erreur lors de la mise à jour des quantités d'articles: " . $conn->error;
+        // Gérer l'échec de la suppression du panier
+        echo "Erreur lors de la suppression du panier: " . $conn->error;
     }
 } else {
     // Si le formulaire n'a pas été soumis correctement, rediriger l'utilisateur vers une page d'erreur ou une autre page appropriée

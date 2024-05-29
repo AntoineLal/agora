@@ -58,10 +58,13 @@ if ($result->num_rows > 0) {
         <div class="panier-items">
             <?php foreach ($panier_items as $item): ?>
                 <div class="item">
-                    <h3><?php echo htmlspecialchars($item['ArticleName']); ?></h3>
+                     <h3><?php echo htmlspecialchars($item['ArticleName']); ?></h3>
                     <p>Quantité : <?php echo $item['Quantity']; ?></p>
                     <p>Prix unitaire : <?php echo $item['Price']; ?> €</p>
-                    <!-- Ajoutez d'autres informations sur l'article si nécessaire -->
+                    <form action="retirerdupanier.php" method="post">
+                    <input type="hidden" name="article_id" value="<?php echo $item['ArticleID']; ?>">
+                    <input type="submit" value="Supprimer">
+            </form>
                 </div>
             <?php endforeach; ?>
         </div>
