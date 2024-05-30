@@ -26,6 +26,7 @@ if (isset($_POST['login_email']) && isset($_POST['login_password'])) {
         $_SESSION['user_id'] = $user['UserID'];
         $_SESSION['user_name'] = $user['UserName'];
         $_SESSION['user_email'] = $user['Email'];
+        $_SESSION['usertype'] = $user['UserType'];
         // Redirection vers la page accueil.php
         header("Location: accueil.php");
         exit();
