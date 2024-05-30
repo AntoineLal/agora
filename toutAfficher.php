@@ -58,7 +58,7 @@
 <nav>
     <a href="accueil.php">Accueil</a>
     <a href="toutAfficher.php">Tout Parcourir</a>
-    <a href="#notifications">Notifications</a>
+    <a href="notifications.php">Notifications</a>
     <a href="panier.php">Panier</a>
     <a href="compte.html">Votre Compte</a>
 </nav>
