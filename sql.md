@@ -1,14 +1,14 @@
 DROP TABLE IF EXISTS Users;
 DROP TABLE IF EXISTS Articles;
 
--- Créer la table Sellers
+-- Créer la table Users
 CREATE TABLE Users (
-UserID INT AUTO_INCREMENT PRIMARY KEY,
-UserName VARCHAR(255) NOT NULL,
-Email VARCHAR(255) NOT NULL UNIQUE,
-UserPassword VARCHAR(255) NOT NULL,
-UserType VARCHAR(255) NOT NULL -- Admin Seller Buyer
-
+    UserID INT AUTO_INCREMENT PRIMARY KEY,
+    UserName VARCHAR(50) NOT NULL,
+    Email VARCHAR(100) NOT NULL UNIQUE,
+    UserPassword VARCHAR(255) NOT NULL,
+    UserType VARCHAR(50) NOT NULL, -- Admin Seller Buyer
+    UserImageURL VARCHAR(255) -- Ajout de la colonne pour l'image de l'utilisateur
 );
 
 -- Créer la table Articles
@@ -67,3 +67,16 @@ VALUES
     FOREIGN KEY (UserID) REFERENCES Users(UserID),
     FOREIGN KEY (WinnerID) REFERENCES Users(UserID)
 );
+
+
+INSERT INTO Users (UserName, Email, UserPassword, UserType, UserImageURL) VALUES
+('Alice', 'alice@example.com', 'password1', 'seller', 'images/user1.jpg'),
+('Bob', 'bob@example.com', 'password2', 'buyer', 'images/user2.jpg'),
+('Charlie', 'charlie@example.com', 'password3', 'seller', 'images/user3.jpg'),
+('David', 'david@example.com', 'password4', 'buyer', 'images/user4.jpg'),
+('Eve', 'eve@example.com', 'password5', 'seller', 'images/user5.jpg'),
+('Frank', 'frank@example.com', 'password6', 'buyer', 'images/user6.jpg'),
+('Grace', 'grace@example.com', 'password7', 'admin', 'images/user7.jpg'),
+('Heidi', 'heidi@example.com', 'password8', 'seller', 'images/user8.jpg'),
+('Ivan', 'ivan@example.com', 'password9', 'buyer', 'images/user9.jpg'),
+('Judy', 'judy@example.com', 'password10', 'admin', 'images/user10.jpg');
