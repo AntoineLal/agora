@@ -45,7 +45,9 @@ if ($result->num_rows > 0) {
     <?php endif; ?>
 
     <?php if (isset($_SESSION['user_id'])): ?>
+        <a href="moncompte.php">mon compte</a>
         <a href="logout.php">Se déconnecter</a>
+
     <?php else: ?>
         <a href="login.html">Votre Compte</a>
     <?php endif; ?>
