@@ -7,16 +7,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user_id = $_SESSION['user_id'];
     $proposed_price = $_POST['proposed_price'];
 
-    if ($check_result->num_rows > 0) {
-        echo "Vous avez déjà soumis une proposition de négociation pour cet article.";
-        exit();
-    }
-
     // Insérer la proposition de négociation dans la table Negociations
     $insert_query = "INSERT INTO Negociations (ArticleID, UserID, ProposedPrice, Status) VALUES ($article_id, $user_id, $proposed_price, 'Pending')";
     
     if ($conn->query($insert_query) === TRUE) {
-        echo "Votre proposition de négociation a été soumise avec succès.";
+        // Redirection vers la page des notifications
+        header("Location: notifications.php");
+        exit(); // Assurez-vous de terminer le script après la redirection
     } else {
         echo "Erreur lors de la soumission de la proposition de négociation : " . $conn->error;
     }
@@ -39,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <nav>
         <a href="accueil.php">Accueil</a>
         <a href="toutAfficher.php">Tout Parcourir</a>
-        <a href="#notifications">Notifications</a>
+        <a href="notifications.php">Notifications</a>
         <a href="panier.php">Panier</a>
         <a href="compte.html">Votre Compte</a>
     </nav>
