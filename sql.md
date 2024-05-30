@@ -67,4 +67,3 @@ VALUES
     FOREIGN KEY (UserID) REFERENCES Users(UserID),
     FOREIGN KEY (WinnerID) REFERENCES Users(UserID)
 );
-INSERT INTO `enchere`(`EnchereID`, `ArticleID`, `UserID`, `BidAmount`, `BidTime`, `StartingPrice`, `WinningBid`, `WinnerID`, `Description`, `ImageURL`, `VideoURL`, `Quality`, `ItemType`, `CreatedAt`, `UpdatedAt`) VALUES (NULL, '34', '0', '0.00', '2024-07-17 15:44:05', '2.00', '0.00', '0', 'Tableau mythique de Claude Monet: Le Pont Japonnais, peint à Giverny', 'le_pont_japonnais.jpg', '', 'Occasion', 'Articles rares', '2024-05-20 06:19:21', '2024-05-29 15:41:51')
