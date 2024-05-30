@@ -1,33 +1,37 @@
-DROP TABLE IF EXISTS Articles;
 DROP TABLE IF EXISTS Users;
+DROP TABLE IF EXISTS Articles;
 
--- Créer la table Users
+-- Créer la table Sellers
 CREATE TABLE Users (
-    UserID INT AUTO_INCREMENT PRIMARY KEY,
-    UserName VARCHAR(50) NOT NULL,
-    Email VARCHAR(100) NOT NULL UNIQUE,
-    UserPassword VARCHAR(255) NOT NULL,
-    UserType VARCHAR(50) NOT NULL, -- Admin Seller Buyer
-    UserImageURL VARCHAR(255) -- Ajout de la colonne pour l'image de l'utilisateur
+UserID INT AUTO_INCREMENT PRIMARY KEY,
+UserName VARCHAR(255) NOT NULL,
+Email VARCHAR(255) NOT NULL UNIQUE,
+UserPassword VARCHAR(255) NOT NULL,
+UserType VARCHAR(255) NOT NULL -- Admin Seller Buyer
+
 );
 
 -- Créer la table Articles
 CREATE TABLE Articles (
-    ArticleID INT AUTO_INCREMENT PRIMARY KEY,        -- Identifiant unique de l'article
-    ArticleName VARCHAR(100) NOT NULL,               -- Nom de l'article
-    Description TEXT,                                -- Description de l'article
-    TypeVente VARCHAR(20) NOT NULL,                  -- Immediat   Enchere   Negotiation 
-    Price DECIMAL(10, 2) NOT NULL,                   -- Prix de l'article
-    ImageURL VARCHAR(255),                           -- Image correspondante
-    VideoURL VARCHAR(255),
-    Quality ENUM('Neuf', 'Occasion', 'Défaut mineur') DEFAULT 'Neuf',
-    Stock INT DEFAULT 1,                             -- Stock 
-    UserID INT,
-    ItemType ENUM('Articles rares', 'Articles hautes de gamme', 'Articles réguliers') NOT NULL,
-    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+ArticleID INT AUTO_INCREMENT PRIMARY KEY,        -- Identifiant unique de l'article
+ArticleName VARCHAR(255) NOT NULL,               -- Nom de l'article
+Description TEXT,                                -- Description de l'article
+TypeVente VARCHAR(255) NOT NULL,		     -- Immediat   Enchere   Negotiation
+Price DECIMAL(10, 2) NOT NULL,                   -- Prix de l'article        
+ImageURL VARCHAR(255),                           -- Image correspondante
+VideoURL VARCHAR(255),                           
+Quality ENUM('Neuf', 'Occasion', 'Défaut mineur') DEFAULT 'Neuf',                                
+Stock INT DEFAULT 1,                             -- Stock
+UserID INT,                                      
+ItemType ENUM('Articles rares', 'Articles hautes de gamme', 'Articles réguliers') NOT NULL,                                        
+CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  
+UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,                    
+FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
+INSERT INTO `agora`.`Users` (`UserName`, `Email`, `UserPassword`, `UserType`)
+VALUES
+('antoine', 'antoine.lallement@edu.ece.fr', 'chaville', 'Admin'),
+('jules', 'jules.kounde@edu.ece.fr', 'foot', 'Seller');
 
 INSERT INTO agora.Articles (ArticleName, Description, TypeVente, Price, ImageURL, VideoURL, Quality, Stock, UserID, ItemType, CreatedAt, UpdatedAt) 
 VALUES 
@@ -43,15 +47,24 @@ VALUES
 ('Lit Double', 'Lit double en bois massif avec tête de lit capitonnée.', 'Immediat', '1899.99', 'images/litdouble.png', NULL, 'Neuf', '3', '2', 'Articles réguliers', '2024-05-20 06:19:21', '2024-05-21 05:21:27'),
 ('Tableau Le Pont Japonnais de Claude Monet', 'Tableau mythique de Claude Monet: Le Pont Japonnais', 'Enchere', '1599.99', 'images/le_pont_japonnais.jpg', NULL, 'Occasion', '1', '2', 'Articles rares', '2024-05-20 06:19:21', '2024-05-21 05:21:27');
  
- -- Insérer 10 utilisateurs dans la table Users
-INSERT INTO Users (UserName, Email, UserPassword, UserType, UserImageURL) VALUES
-('Alice', 'alice@example.com', 'password1', 'Seller', 'images/user1.jpg'),
-('Bob', 'bob@example.com', 'password2', 'Buyer', 'images/user2.jpg'),
-('Charlie', 'charlie@example.com', 'password3', 'Seller', 'images/user3.jpg'),
-('David', 'david@example.com', 'password4', 'Buyer', 'images/user4.jpg'),
-('Eve', 'eve@example.com', 'password5', 'Seller', 'images/user5.jpg'),
-('Frank', 'frank@example.com', 'password6', 'Buyer', 'images/user6.jpg'),
-('Grace', 'grace@example.com', 'password7', 'Admin', 'images/user7.jpg'),
-('Heidi', 'heidi@example.com', 'password8', 'Seller', 'images/user8.jpg'),
-('Ivan', 'ivan@example.com', 'password9', 'Buyer', 'images/user9.jpg'),
-('Judy', 'judy@example.com', 'password10', 'Admin', 'images/user10.jpg');
+ CREATE TABLE Enchere (
+    EnchereID INT AUTO_INCREMENT PRIMARY KEY,         -- Identifiant unique de l'enchère
+    ArticleID INT NOT NULL,                           -- Référence à l'article
+    UserID INT NOT NULL,                              -- Référence à l'utilisateur qui place une enchère
+    BidAmount DECIMAL(10, 2) NOT NULL,                -- Montant de l'enchère
+    BidTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,      -- Heure de l'enchère
+    StartingPrice DECIMAL(10, 2) NOT NULL,            -- Prix de départ de l'enchère
+    WinningBid DECIMAL(10, 2),                        -- Montant final gagnant (mis à jour lorsque l'enchère est terminée)
+    WinnerID INT,                                     -- Utilisateur qui a remporté l'enchère (mis à jour lorsque l'enchère est terminée)
+    Description TEXT,                                 -- Description de l'article
+    ImageURL VARCHAR(255),                            -- URL de l'image de l'article
+    VideoURL VARCHAR(255),                            -- URL de la vidéo de l'article
+    Quality ENUM('Neuf', 'Occasion', 'Défaut mineur') DEFAULT 'Neuf',  -- Qualité de l'article
+    ItemType ENUM('Articles rares', 'Articles hautes de gamme', 'Articles réguliers') NOT NULL, -- Type d'article
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,    -- Date de création de l'enregistrement
+    UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Date de mise à jour de l'enregistrement
+    FOREIGN KEY (ArticleID) REFERENCES Articles(ArticleID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    FOREIGN KEY (WinnerID) REFERENCES Users(UserID)
+);
+INSERT INTO `enchere`(`EnchereID`, `ArticleID`, `UserID`, `BidAmount`, `BidTime`, `StartingPrice`, `WinningBid`, `WinnerID`, `Description`, `ImageURL`, `VideoURL`, `Quality`, `ItemType`, `CreatedAt`, `UpdatedAt`) VALUES (NULL, '34', '0', '0.00', '2024-07-17 15:44:05', '2.00', '0.00', '0', 'Tableau mythique de Claude Monet: Le Pont Japonnais, peint à Giverny', 'le_pont_japonnais.jpg', '', 'Occasion', 'Articles rares', '2024-05-20 06:19:21', '2024-05-29 15:41:51')
