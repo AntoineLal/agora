@@ -9,14 +9,26 @@ include 'config.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notifications de Négociation - Agora Francia</title>
-    <link rel="stylesheet" href="style1.css"> <!-- Assurez-vous que le chemin du fichier CSS est correct -->
+    <link rel="stylesheet" href="style1.css"> 
     <style>
-        /* Ajoutez ici vos styles spécifiques à la page de notification */
-        .content {
-            /* Ajoutez vos styles de mise en page ici */
+        table {
+            border-collapse: collapse;
+            width: 100%;
         }
 
-        /* Ajoutez d'autres styles personnalisés au besoin */
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        td {
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body>
@@ -26,7 +38,7 @@ include 'config.php';
 <nav>
     <a href="accueil.php">Accueil</a>
     <a href="toutAfficher.php">Tout Parcourir</a>
-    <a href="#notifications">Notifications</a>
+    <a href="notifications.php">Notifications</a>
     <a href="panier.php">Panier</a>
     <a href="compte.html">Votre Compte</a>
 </nav>
@@ -39,9 +51,9 @@ include 'config.php';
     $sql = "SELECT N.NegociationID, N.ArticleID, A.ArticleName, N.ProposedPrice, N.Status
             FROM Negociations N
             INNER JOIN Articles A ON N.ArticleID = A.ArticleID
-            WHERE N.UserID = $user_id";
+            WHERE A.UserID = $user_id";
     $result = $conn->query($sql);
-
+       
     if ($result->num_rows > 0) {
         echo "<h2>Notifications de Négociation</h2>";
         echo "<table>";
@@ -58,10 +70,13 @@ include 'config.php';
             echo "<td>" . $row["Status"] . "</td>";
             if ($user_type === 'seller') {
                 echo "<td>";
-                if ($row["Status"] === 'En Attente') {
-                    echo '<form action="traiter_negociation.php" method="POST">';
+                if ($row["Status"] === 'Pending') {
+                    echo '<form action="accepter_negociation.php" method="POST">';
                     echo '<input type="hidden" name="negociation_id" value="' . $row["NegociationID"] . '">';
                     echo '<input type="submit" name="accepter" value="Accepter">';
+                    echo '</form>';
+                    echo '<form action="refuser_negociation.php" method="POST">';
+                    echo '<input type="hidden" name="negociation_id" value="' . $row["NegociationID"] . '">';
                     echo '<input type="submit" name="refuser" value="Refuser">';
                     echo '</form>';
                 }

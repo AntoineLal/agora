@@ -19,7 +19,7 @@
         <select id="type_vente" name="type_vente" required>
             <option value="Immediat">Vente immédiate</option>
             <option value="Enchere">Enchère</option>
-            <option value="Negotiation">Négociation</option>
+            <option value="Negociation">Négociation</option>
         </select><br><br>
         
         <label for="price">Prix:</label><br>
