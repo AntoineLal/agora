@@ -21,18 +21,49 @@ if ($conn->connect_error) {
 
 $user_id = $_SESSION['user_id'];
 
-// Récupérer les informations de l'utilisateur connecté
-$sql = "SELECT * FROM Users WHERE UserID='$user_id'";
-$result = $conn->query($sql);
+// Si le formulaire est soumis pour vérifier le mot de passe
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['verify_password'])) {
+    $entered_password = $_POST['password'];
 
-if ($result->num_rows == 1) {
-    $user = $result->fetch_assoc();
-} else {
-    echo "Utilisateur non trouvé.";
-    exit();
+    // Récupérer le mot de passe de l'utilisateur depuis la base de données
+    $sql = "SELECT UserPassword FROM Users WHERE UserID='$user_id'";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows == 1) {
+        $user = $result->fetch_assoc();
+        $stored_password = $user['UserPassword'];
+
+        // Vérifier si le mot de passe saisi correspond au mot de passe dans la base de données
+        if ($entered_password === $stored_password) {
+            // Afficher le formulaire pour modifier les informations du compte
+            $show_update_form = true;
+        } else {
+            // Mot de passe incorrect
+            $password_error = "Mot de passe incorrect.";
+        }
+    } else {
+        echo "Utilisateur non trouvé.";
+        exit();
+    }
 }
 
-$conn->close();
+// Si le formulaire de mise à jour est soumis
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_info'])) {
+    // Récupérer les informations du formulaire
+    $new_username = $_POST['username'];
+    $new_email = $_POST['email'];
+
+    // Mettre à jour les informations dans la base de données
+    $update_sql = "UPDATE Users SET UserName='$new_username', Email='$new_email' WHERE UserID='$user_id'";
+    if ($conn->query($update_sql) === TRUE) {
+        // Redirection vers la page moncompte.php avec un message de succès
+        header("Location: moncompte.php?success=1");
+        exit();
+    } else {
+        echo "Erreur lors de la mise à jour des informations du compte : " . $conn->error;
+        exit();
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -43,7 +74,6 @@ $conn->close();
     <title>Mon Compte - Agora Francia</title>
     <link rel="stylesheet" href="style5.css">
     <link rel="stylesheet" href="style1.css">
-
 </head>
 <body>
 <header>
@@ -57,22 +87,30 @@ $conn->close();
     <a href="logout.php">Se déconnecter</a>
 </nav>
 <div class="content">
-    <form action="traitement_modifier_compte.php" method="post" enctype="multipart/form-data">
-        <label for="username">Nom d'utilisateur:</label><br>
-        <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user['UserName']); ?>" required><br><br>
-        
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['Email']); ?>" required><br><br>
-        
-        <label for="password">Mot de passe:</label><br>
-        <input type="password" id="password" name="password"><br><br>
-        
-        <label for="user_image">Image de profil:</label><br>
-        <input type="file" id="user_image" name="user_image"><br><br>
-        <img src="<?php echo htmlspecialchars($user['UserImageURL']); ?>" alt="Image de profil" style="max-width: 150px; max-height: 150px;"><br><br>
-        
-        <input type="submit" value="Enregistrer les modifications">
-    </form>
+    <?php if (isset($show_update_form) && $show_update_form) : ?>
+        <!-- Formulaire pour modifier les informations du compte -->
+        <form action="moncompte.php" method="post" enctype="multipart/form-data">
+            <label for="username">Nom d'utilisateur:</label><br>
+            <input type="text" id="username" name="username" value="<?php echo isset($user['UserName']) ? htmlspecialchars($user['UserName']) : ''; ?>" required><br><br>
+            
+            <label for="email">Email:</label><br>
+            <input type="email" id="email" name="email" value="<?php echo isset($user['Email']) ? htmlspecialchars($user['Email']) : ''; ?>" required><br><br>
+            
+            <label for="profile_image">Photo de profil:</label><br>
+            <input type="file" id="profile_image" name="profile_image" accept="image/*"><br><br>
+            
+            <input type="submit" name="update_info" value="Enregistrer les modifications">
+        </form>
+    <?php else : ?>
+        <!-- Formulaire pour vérifier le mot de passe -->
+        <form action="moncompte.php" method="post">
+            <label for="password">Mot de passe:</label><br>
+            <input type="password" id="password" name="password" required><br>
+            <span><?php echo isset($password_error) ? $password_error : ''; ?></span><br>
+            
+            <input type="submit" name="verify_password" value="Vérifier le mot de passe">
+        </form>
+    <?php endif; ?>
 </div>
 <div id="footer">
     <p>&copy; 2024 Agora Francia. Tous droits réservés.</p>

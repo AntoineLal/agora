@@ -7,60 +7,45 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "agora";
+// Vérifier si le formulaire est soumis
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Vérifier si le nouveau mot de passe est présent
+    if (isset($_POST['password']) && !empty($_POST['password'])) {
+        // Récupérer l'ID de l'utilisateur connecté
+        $user_id = $_SESSION['user_id'];
 
-// Connexion à la base de données
-$conn = new mysqli($servername, $username, $password, $dbname);
+        // Nouveau mot de passe
+        $new_password = $_POST['password'];
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+        // Hasher le nouveau mot de passe
+        $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
 
-$user_id = $_SESSION['user_id'];
-$username = $_POST['username'];
-$email = $_POST['email'];
-$password = isset($_POST['password']) ? $_POST['password'] : '';
+        // Connexion à la base de données
+        $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $dbname = "agora";
 
-// Initialiser l'URL de l'image
-$image_url = '';
+        $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Vérifier si un fichier image a été téléchargé
-if (isset($_FILES['user_image']) && $_FILES['user_image']['error'] == UPLOAD_ERR_OK) {
-    $upload_dir = "images/";
-    $file_name = basename($_FILES['user_image']['name']);
-    $file_tmp = $_FILES['user_image']['tmp_name'];
-    $file_path = $upload_dir . $file_name;
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }   
 
-    // Déplacer le fichier téléchargé vers le dossier de destination
-    if (move_uploaded_file($file_tmp, $file_path)) {
-        $image_url = $file_path;
+        // Préparer la requête SQL pour mettre à jour le mot de passe
+        $sql = "UPDATE Users SET UserPassword='$hashed_password' WHERE UserID='$user_id'";
+
+        if ($conn->query($sql) === TRUE) {
+            // Mot de passe mis à jour avec succès
+            echo "Mot de passe mis à jour avec succès." . $conn->error;
+        } else {
+            echo "Erreur lors de la mise à jour du mot de passe : " . $conn->error;
+        }
+
+        $conn->close();
     } else {
-        echo "Erreur lors du téléchargement de l'image.";
+        // Le champ du nouveau mot de passe est vide
+        echo "Veuillez fournir un nouveau mot de passe.";
     }
 }
-
-// Mettre à jour les informations de l'utilisateur
-if (!empty($password)) {
-    $password_hashed = password_hash($password, PASSWORD_BCRYPT);
-    $sql = "UPDATE Users SET UserName=?, Email=?, UserPassword=?, UserImageURL=? WHERE UserID=?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssssi", $username, $email, $password_hashed, $image_url, $user_id);
-} else {
-    $sql = "UPDATE Users SET UserName=?, Email=?, UserImageURL=? WHERE UserID=?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssi", $username, $email, $image_url, $user_id);
-}
-
-if ($stmt->execute()) {
-    header("Location: moncompte.php");
-    exit();
-} else {
-    echo "Erreur lors de la mise à jour des informations.";
-}
-
-$stmt->close();
-$conn->close();
 ?>
