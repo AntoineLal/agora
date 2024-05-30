@@ -45,7 +45,7 @@ VALUES
 ('Chaise de Bureau', 'Chaise de bureau ergonomique, avec support lombaire et accoudoirs ajustables.', 'Immediat', '250.00', 'images/chaisebureau.png', NULL, 'Neuf', '15', '2', 'Articles réguliers', '2024-05-20 06:19:21', '2024-05-21 05:21:27'),
 ('Table Basse', 'Table basse en verre trempé avec pieds en métal, design moderne.', 'Immediat', '299.99', 'images/tablebasse.png', NULL, 'Neuf', '8', '2', 'Articles rares', '2024-05-20 06:19:21', '2024-05-21 05:21:27'),
 ('Lit Double', 'Lit double en bois massif avec tête de lit capitonnée.', 'Immediat', '1899.99', 'images/litdouble.png', NULL, 'Neuf', '3', '2', 'Articles réguliers', '2024-05-20 06:19:21', '2024-05-21 05:21:27'),
-('Tableau Le Pont Japonnais de Claude Monet', 'Tableau mythique de Claude Monet: Le Pont Japonnais', 'Enchere', '1599.99', 'images/le_pont_japonnais.jpg', NULL, 'Occasion', '1', '2', 'Articles rares', '2024-05-20 06:19:21', '2024-05-21 05:21:27');
+('Tableau Le Pont Japonnais de Claude Monet', 'Tableau mythique de Claude Monet: Le Pont Japonnais', 'Enchere', '2 000 000', 'images/le_pont_japonnais.jpg', NULL, 'Occasion', '1', '2', 'Articles rares', '2024-05-20 06:19:21', '2024-05-21 05:21:27');
  
  CREATE TABLE Enchere (
     EnchereID INT AUTO_INCREMENT PRIMARY KEY,         -- Identifiant unique de l'enchère
