@@ -46,8 +46,8 @@ if ($result->num_rows > 0) {
 
     <?php if (isset($_SESSION['user_id'])): ?>
         <a href="moncompte.php" style="display: inline-block; margin: 0; padding: 0;">
-    <img src="<?php echo htmlspecialchars($_SESSION['UserImageURL']); ?>" alt="Image de profil" style="max-width: 120px; max-height: 60px; margin: 0; padding: 0; border: none;"></a>
-        <a href="logout.php">déconnexion</a>
+            <img src="<?php echo htmlspecialchars($_SESSION['UserImageURL']); ?>" alt="Image de profil" style="max-width: 120px; max-height: 60px; margin: 0; padding: 0; border: none;"></a>
+        <a href="logout.php">Déconnexion</a>
 
     <?php else: ?>
         <a href="login.html">Se connecter</a>
