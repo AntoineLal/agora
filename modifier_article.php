@@ -75,7 +75,7 @@ $conn->close();
         <select id="type_vente" name="type_vente" required>
             <option value="Immediat" <?php if ($article['TypeVente'] == 'Immediat') echo 'selected'; ?>>Vente immédiate</option>
             <option value="Enchere" <?php if ($article['TypeVente'] == 'Enchere') echo 'selected'; ?>>Enchère</option>
-            <option value="Negotiation" <?php if ($article['TypeVente'] == 'Negotiation') echo 'selected'; ?>>Négociation</option>
+            <option value="Negociation" <?php if ($article['TypeVente'] == 'Negociation') echo 'selected'; ?>>Négociation</option>
         </select><br><br>
         
         <label for="price">Prix:</label><br>

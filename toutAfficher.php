@@ -47,7 +47,7 @@
             width: 100%;
             height: 100%;
             background-image: repeating-linear-gradient(45deg, transparent, transparent 5px, #ccc 5px, #ccc 10px);
-            opacity: 0.7; /* Opacité des hachures */
+            opacity: 0.7;
         }
     </style>
 </head>
@@ -79,8 +79,8 @@
             die("La connexion a échoué : " . $conn->connect_error);
         }
 
-        // Requête SQL pour récupérer les informations sur les articles
-        $sql = "SELECT ArticleID, ArticleName, Description, Price, ImageURL, Stock FROM Articles";
+        // Requête SQL pour récupérer les informations sur les articles avec le type spécifié
+        $sql = "SELECT ArticleID, ArticleName, Description, Price, ImageURL, Stock FROM Articles WHERE TypeVente IN ('Immediat', 'Negociation', 'Enchere')";
         $result = $conn->query($sql);
 
         // Si des articles sont trouvés, afficher leurs vignettes

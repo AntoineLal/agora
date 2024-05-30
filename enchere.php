@@ -2,7 +2,10 @@
 session_start();
 
 // Vérifier si l'utilisateur est connecté et s'il est un acheteur
-
+if (!isset($_SESSION['user_id']) || $_SESSION['usertype'] !== 'buyer') {
+    header("Location: login.html");
+    exit();
+}
 
 include 'config.php'; // Inclure le fichier de configuration pour la connexion à la base de données
 
@@ -36,10 +39,10 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows == 0) {
-    $sql_insert = "INSERT INTO Enchere (ArticleID, UserID, StartingPrice, Description, ImageURL, VideoURL, Quality, ItemType)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql_insert = "INSERT INTO Enchere (ArticleID, UserID, StartingPrice, Description, ImageURL, VideoURL, Quality, ItemType, BidAmount)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt_insert = $conn->prepare($sql_insert);
-    $stmt_insert->bind_param("iissssss", $article_id, $_SESSION['user_id'], $article['Price'], $article['Description'], $article['ImageURL'], $article['VideoURL'], $article['Quality'], $article['ItemType']);
+    $stmt_insert->bind_param("iissssssd", $article_id, $_SESSION['user_id'], $article['Price'], $article['Description'], $article['ImageURL'], $article['VideoURL'], $article['Quality'], $article['ItemType'], $article['Price']);
     $stmt_insert->execute();
 }
 
@@ -52,24 +55,27 @@ $result = $stmt->get_result();
 $enchere = $result->fetch_assoc();
 
 $current_bid = $enchere['BidAmount'] ? $enchere['BidAmount'] : $enchere['StartingPrice'];
+$last_bid_user_id = $enchere['UserID'];
 
 // Traitement du formulaire d'enchère
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $new_bid_amount = $_POST['bid_amount'];
+    $increment = floatval($_POST['increment']);
+    $new_bid_amount = $current_bid * (1 + $increment);
     $user_id = $_SESSION['user_id'];
 
-    if ($new_bid_amount >= $current_bid * 1.10) {
-        $sql = "INSERT INTO Enchere (ArticleID, UserID, BidAmount, StartingPrice) VALUES (?, ?, ?, ?)";
+    if ($new_bid_amount > $current_bid) {
+        $sql = "UPDATE Enchere SET BidAmount = ?, UserID = ?, UpdatedAt = NOW() WHERE ArticleID = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("iidd", $article_id, $user_id, $new_bid_amount, $enchere['StartingPrice']);
+        $stmt->bind_param("dii", $new_bid_amount, $user_id, $article_id);
         if ($stmt->execute()) {
             echo "Enchère placée avec succès.";
             $current_bid = $new_bid_amount;
+            $last_bid_user_id = $user_id;
         } else {
             echo "Erreur : " . $stmt->error;
         }
     } else {
-        echo "L'enchère doit être au moins 10% supérieure à l'enchère actuelle.";
+        echo "L'enchère doit être supérieure à l'enchère actuelle.";
     }
 }
 
@@ -102,6 +108,9 @@ $conn->close();
             max-width: 400px;
             word-wrap: break-word; 
         }
+        .bid-buttons button {
+            margin: 5px;
+        }
     </style>
 </head>
 <body>
@@ -127,10 +136,16 @@ $conn->close();
             <p>Enchère actuelle : <?php echo number_format($current_bid, 2); ?> €</p>
             <p>Qualité : <?php echo htmlspecialchars($article['Quality']); ?></p>
             <p>Type d'article : <?php echo htmlspecialchars($article['ItemType']); ?></p>
+            <p>Dernier enchérisseur : <?php echo htmlspecialchars($last_bid_user_id); ?></p>
             <form action="enchere.php?article_id=<?php echo $article_id; ?>" method="post">
-                <label for="bid_amount">Votre enchère (doit être au moins 10% supérieure à l'enchère actuelle) :</label><br>
-                <input type="number" id="bid_amount" name="bid_amount" min="<?php echo $current_bid * 1.10; ?>" step="0.01" required><br><br>
-                <input type="submit" value="Placer l'enchère">
+                <div class="bid-buttons">
+                    <?php
+                    for ($i = 10; $i <= 100; $i += 10) {
+                        $increment = $i / 100;
+                        echo '<button type="submit" name="increment" value="' . $increment . '">+' . $i . '%</button>';
+                    }
+                    ?>
+                </div>
             </form>
         </div>
     </div>
