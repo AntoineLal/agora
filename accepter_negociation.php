@@ -14,18 +14,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $article_id = $negociation_row['ArticleID'];
         $proposed_price = $negociation_row['ProposedPrice'];
 
-        // Insérer un nouvel article avec le prix négocié et le type de vente "remise"
-        $insert_article_query = "INSERT INTO Articles (ArticleName, Description, TypeVente, Price, Stock, UserID, ItemType, CreatedAt, UpdatedAt) 
-                                 SELECT ArticleName, Description, 'remise', $proposed_price, Stock, UserID, ItemType, NOW(), NOW() 
-                                 FROM Articles WHERE ArticleID = $article_id";
-        if ($conn->query($insert_article_query) !== TRUE) {
-            echo "Erreur lors de la création de l'article avec le prix négocié : " . $conn->error;
-            exit();
-        }
-
-        // Récupérer l'ID du nouvel article créé
-        $new_article_id = $conn->insert_id;
-
         // Mettre à jour l'état de la négociation en "Accepted"
         $update_query = "UPDATE Negociations SET Status = 'Accepted' WHERE NegociationID = $negociation_id";
         if ($conn->query($update_query) !== TRUE) {
@@ -33,17 +21,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         }
 
-        // Ajouter l'article dans le panier de l'utilisateur
-        $insert_panier_query = "INSERT INTO PanierArticles (PanierID, ArticleID, Quantity) VALUES ((SELECT PanierID FROM Panier WHERE UserID = $user_id AND Status = 'En cours'), $new_article_id, 1)";
-        if ($conn->query($insert_panier_query) !== TRUE) {
+        // Vérifier si l'utilisateur a déjà un panier en cours
+        $panier_id_query = "SELECT PanierID FROM Panier WHERE UserID = $user_id AND Status = 'En cours'";
+        $panier_id_result = $conn->query($panier_id_query);
+
+        if ($panier_id_result->num_rows > 0) {
+            // Utilisateur a déjà un panier en cours, récupérer le PanierID
+            $panier_row = $panier_id_result->fetch_assoc();
+            $panier_id = $panier_row['PanierID'];
+        } else {
+            // Créer un nouveau panier pour l'utilisateur
+            $insert_panier_query = "INSERT INTO Panier (UserID, Status) VALUES ($user_id, 'En cours')";
+            if ($conn->query($insert_panier_query) !== TRUE) {
+                echo "Erreur lors de la création du panier : " . $conn->error;
+                exit();
+            }
+            // Récupérer l'ID du nouveau panier
+            $panier_id = $conn->insert_id;
+        }
+
+        // Calculer la différence entre le prix original et le prix négocié
+        $article_price_query = "SELECT Price FROM Articles WHERE ArticleID = $article_id";
+        $article_price_result = $conn->query($article_price_query);
+        if ($article_price_result->num_rows > 0) {
+            $article_price_row = $article_price_result->fetch_assoc();
+            $original_price = $article_price_row['Price'];
+
+            // Calculer la remise
+            $remise = $original_price - $proposed_price;
+
+            // Insérer la remise dans la table Remises associée au panier
+            $insert_remise_query = "INSERT INTO Remises (PanierID, MontantRemise) VALUES ($panier_id, $remise)";
+            if ($conn->query($insert_remise_query) !== TRUE) {
+                echo "Erreur lors de l'insertion de la remise : " . $conn->error;
+                exit();
+            }
+        } else {
+            echo "Erreur: Article non trouvé.";
+            exit();
+        }
+
+        $insert_panier_article_query = "INSERT INTO PanierArticles (PanierID, ArticleID, Quantity) VALUES ($panier_id, $article_id, 1)";
+        if ($conn->query($insert_panier_article_query) !== TRUE) {
             echo "Erreur lors de l'ajout de l'article dans le panier : " . $conn->error;
             exit();
         }
 
-        // Mettre à jour le stock de l'article original en retirant 1
+        // Mettre à jour le stock de l'article en retirant 1
         $update_stock_query = "UPDATE Articles SET Stock = Stock - 1 WHERE ArticleID = $article_id";
         if ($conn->query($update_stock_query) !== TRUE) {
-            echo "Erreur lors de la mise à jour du stock de l'article original : " . $conn->error;
+            echo "Erreur lors de la mise à jour du stock de l'article : " . $conn->error;
             exit();
         }
     } else {
