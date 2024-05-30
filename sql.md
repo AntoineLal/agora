@@ -1,14 +1,14 @@
 DROP TABLE IF EXISTS Users;
 DROP TABLE IF EXISTS Articles;
 
--- Créer la table Sellers
+-- Créer la table Users
 CREATE TABLE Users (
-UserID INT AUTO_INCREMENT PRIMARY KEY,
-UserName VARCHAR(255) NOT NULL,
-Email VARCHAR(255) NOT NULL UNIQUE,
-UserPassword VARCHAR(255) NOT NULL,
-UserType VARCHAR(255) NOT NULL -- Admin Seller Buyer
-
+    UserID INT AUTO_INCREMENT PRIMARY KEY,
+    UserName VARCHAR(50) NOT NULL,
+    Email VARCHAR(100) NOT NULL UNIQUE,
+    UserPassword VARCHAR(255) NOT NULL,
+    UserType VARCHAR(50) NOT NULL, -- Admin Seller Buyer
+    UserImageURL VARCHAR(255) -- Ajout de la colonne pour l'image de l'utilisateur
 );
 
 -- Créer la table Articles
@@ -45,7 +45,7 @@ VALUES
 ('Chaise de Bureau', 'Chaise de bureau ergonomique, avec support lombaire et accoudoirs ajustables.', 'Immediat', '250.00', 'images/chaisebureau.png', NULL, 'Neuf', '15', '2', 'Articles réguliers', '2024-05-20 06:19:21', '2024-05-21 05:21:27'),
 ('Table Basse', 'Table basse en verre trempé avec pieds en métal, design moderne.', 'Immediat', '299.99', 'images/tablebasse.png', NULL, 'Neuf', '8', '2', 'Articles rares', '2024-05-20 06:19:21', '2024-05-21 05:21:27'),
 ('Lit Double', 'Lit double en bois massif avec tête de lit capitonnée.', 'Immediat', '1899.99', 'images/litdouble.png', NULL, 'Neuf', '3', '2', 'Articles réguliers', '2024-05-20 06:19:21', '2024-05-21 05:21:27'),
-('Tableau Le Pont Japonnais de Claude Monet', 'Tableau mythique de Claude Monet: Le Pont Japonnais', 'Enchere', '1599.99', 'images/le_pont_japonnais.jpg', NULL, 'Occasion', '1', '2', 'Articles rares', '2024-05-20 06:19:21', '2024-05-21 05:21:27');
+('Tableau Le Pont Japonnais de Claude Monet', 'Tableau mythique de Claude Monet: Le Pont Japonnais', 'Enchere', '2 000 000', 'images/le_pont_japonnais.jpg', NULL, 'Occasion', '1', '2', 'Articles rares', '2024-05-20 06:19:21', '2024-05-21 05:21:27');
  
  CREATE TABLE Enchere (
     EnchereID INT AUTO_INCREMENT PRIMARY KEY,         -- Identifiant unique de l'enchère
@@ -67,4 +67,16 @@ VALUES
     FOREIGN KEY (UserID) REFERENCES Users(UserID),
     FOREIGN KEY (WinnerID) REFERENCES Users(UserID)
 );
-INSERT INTO `enchere`(`EnchereID`, `ArticleID`, `UserID`, `BidAmount`, `BidTime`, `StartingPrice`, `WinningBid`, `WinnerID`, `Description`, `ImageURL`, `VideoURL`, `Quality`, `ItemType`, `CreatedAt`, `UpdatedAt`) VALUES (NULL, '34', '0', '0.00', '2024-07-17 15:44:05', '2.00', '0.00', '0', 'Tableau mythique de Claude Monet: Le Pont Japonnais, peint à Giverny', 'le_pont_japonnais.jpg', '', 'Occasion', 'Articles rares', '2024-05-20 06:19:21', '2024-05-29 15:41:51')
+
+
+INSERT INTO Users (UserName, Email, UserPassword, UserType, UserImageURL) VALUES
+('Alice', 'alice@example.com', 'password1', 'seller', 'images/user1.jpg'),
+('Bob', 'bob@example.com', 'password2', 'buyer', 'images/user2.jpg'),
+('Charlie', 'charlie@example.com', 'password3', 'seller', 'images/user3.jpg'),
+('David', 'david@example.com', 'password4', 'buyer', 'images/user4.jpg'),
+('Eve', 'eve@example.com', 'password5', 'seller', 'images/user5.jpg'),
+('Frank', 'frank@example.com', 'password6', 'buyer', 'images/user6.jpg'),
+('Grace', 'grace@example.com', 'password7', 'admin', 'images/user7.jpg'),
+('Heidi', 'heidi@example.com', 'password8', 'seller', 'images/user8.jpg'),
+('Ivan', 'ivan@example.com', 'password9', 'buyer', 'images/user9.jpg'),
+('Judy', 'judy@example.com', 'password10', 'admin', 'images/user10.jpg');
