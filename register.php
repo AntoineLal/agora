@@ -33,6 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $_SESSION['user_id'] = $user_id;
                     $_SESSION['user_name'] = $username;
                     $_SESSION['user_email'] = $email;
+                    $_SESSION['usertype'] = $usertype;
                     $success_message = "Compte créé avec succès";
                 } else {
                     $error_message = "Erreur : " . $sql . "<br>" . $conn->error;
@@ -45,6 +46,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['user_id'] = $user_id;
                 $_SESSION['user_name'] = $username;
                 $_SESSION['user_email'] = $email;
+                $_SESSION['usertype'] = $usertype;
+
                 $success_message = "Compte créé avec succès";
             } else {
                 $error_message = "Erreur : " . $sql . "<br>" . $conn->error;

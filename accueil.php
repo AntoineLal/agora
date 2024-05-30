@@ -37,7 +37,7 @@ if ($result->num_rows > 0) {
     <a href="#notifications">Notifications</a>
 
     <?php if (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'buyer'): ?>
-        <a href="#panier">Panier</a>
+        <a href="#panier.php">Panier</a>
     <?php elseif (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'seller'): ?>
         <a href="offres.php">Mes Offres</a>
     <?php elseif (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'admin'): ?>
