@@ -55,7 +55,7 @@
         .filter-btn {
             margin-left: 10px;
         }
-    </style>
+        </style>
 </head>
 <body>
 <header>
@@ -64,24 +64,9 @@
 <nav>
     <a href="accueil.php">Accueil</a>
     <a href="toutAfficher.php">Tout Parcourir</a>
-    <a href="#notifications">Notifications</a>
-
-    <?php if (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'buyer'): ?>
-        <a href="#panier.php">Panier</a>
-    <?php elseif (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'seller'): ?>
-        <a href="offres.php">Mes Offres</a>
-    <?php elseif (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'admin'): ?>
-        <a href="gestion.php">Gestion</a>
-    <?php endif; ?>
-
-    <?php if (isset($_SESSION['user_id'])): ?>
-        <a href="moncompte.php" style="display: inline-block; margin: 0; padding: 0;">
-    <img src="<?php echo htmlspecialchars($_SESSION['UserImageURL']); ?>" alt="Image de profil" style="max-width: 120px; max-height: 60px; margin: 0; padding: 0; border: none;"></a>
-        <a href="logout.php">déconnexion</a>
-
-    <?php else: ?>
-        <a href="login.html">Se connecter</a>
-    <?php endif; ?>
+    <a href="notifications.php">Notifications</a>
+    <a href="panier.php">Panier</a>
+    <a href="compte.html">Votre Compte</a>
 </nav>
 <div class="content">
     <h2>Tous les articles</h2>
@@ -93,11 +78,18 @@
             <option value="Negociation">Négociation</option>
             <option value="Enchere">Enchère</option>
         </select>
-        <label for="TypeAchat">Etat de l'objet:</label>
+        <label for="TypeAchat">Type d'achat:</label>
         <select name="TypeAchat" id="TypeAchat">
             <option value="Tous">Tous</option>
             <option value="Neuf">Neuf</option>
             <option value="Occasion">Occasion</option>
+        </select>
+        <label for="Rarete">Rareté:</label>
+        <select name="Rarete" id="Rarete">
+            <option value="Tous">Tous</option>
+            <option value="Articles rares">Articles rares</option>
+            <option value="Articles reguliers">Articles reguliers</option>
+            <option value="Articles hautes de gamme">Articles hautes de gamme</option>
         </select>
         <button class="filter-btn" onclick="applyFilters()">Appliquer les filtres</button>
     </div>
@@ -136,6 +128,16 @@
             // Ajouter le type d'achat à la condition du filtre
             if ($TypeAchat != 'Tous') {
                 $filter_conditions[] = "Quality = '$TypeAchat'";
+            }
+        }
+
+        // Vérifier si la rareté est définie dans l'URL
+        if (isset($_GET['Rarete'])) {
+            $Rarete = $_GET['Rarete'];
+
+            // Ajouter la rareté à la condition du filtre
+            if ($Rarete != 'Tous') {
+                $filter_conditions[] = "ItemType = '$Rarete'";
             }
         }
 
@@ -187,7 +189,8 @@
     function applyFilters() {
         var TypeVente = document.getElementById("TypeVente").value;
         var TypeAchat = document.getElementById("TypeAchat").value;
-        window.location.href = "toutAfficher.php?TypeVente=" + TypeVente + "&TypeAchat=" + TypeAchat;
+        var Rarete = document.getElementById("Rarete").value;
+        window.location.href = "toutAfficher.php?TypeVente=" + TypeVente + "&TypeAchat=" + TypeAchat + "&Rarete=" + Rarete;
     }
 </script>
 </body>
