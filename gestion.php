@@ -87,7 +87,6 @@ function afficherArticles($conn) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion - Agora Francia</title>
-    <link rel="stylesheet" href="style1.css">
     <style>
         table {
             width: 100%;
@@ -102,16 +101,40 @@ function afficherArticles($conn) {
             background-color: #f2f2f2;
         }
     </style>
-    
+    <link rel="stylesheet" href="style1.css">
+    <style>
+        img {
+            max-width: 150px;
+            max-height: 150px;
+        }
+    </style>
 </head>
 <body>
 <header>
-    <h1>Gestion - Agora Francia</h1>
-    <nav>
-        <a href="accueil.php">Accueil</a>
-        <a href="toutAfficher.php">Tout Parcourir</a>
-        <a href="logout.php">Se déconnecter</a>
-    </nav>
+    <h1>GESTION</h1>
+</header>
+<nav>
+    <a href="accueil.php">Accueil</a>
+    <a href="toutAfficher.php">Tout Parcourir</a>
+    <a href="#notifications">Notifications</a>
+
+    <?php if (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'buyer'): ?>
+        <a href="#panier.php">Panier</a>
+    <?php elseif (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'seller'): ?>
+        <a href="offres.php">Mes Offres</a>
+    <?php elseif (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'admin'): ?>
+        <a href="gestion.php">Gestion</a>
+    <?php endif; ?>
+
+    <?php if (isset($_SESSION['user_id'])): ?>
+        <a href="moncompte.php" style="display: inline-block; margin: 0; padding: 0;">
+    <img src="<?php echo htmlspecialchars($_SESSION['UserImageURL']); ?>" alt="Image de profil" style="max-width: 120px; max-height: 60px; margin: 0; padding: 0; border: none;"></a>
+        <a href="logout.php">déconnexion</a>
+
+    <?php else: ?>
+        <a href="login.html">Se connecter</a>
+    <?php endif; ?>
+</nav>
 </header>
 
 <div class="content">
