@@ -185,3 +185,17 @@ CREATE TABLE Negociations (
     FOREIGN KEY (ArticleID) REFERENCES Articles(ArticleID),
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
+
+CREATE TABLE Remises (
+    RemiseID INT AUTO_INCREMENT PRIMARY KEY,  -- Identifiant unique de la remise
+    PanierID INT,                             -- Identifiant du panier associé à la remise
+    MontantRemise DECIMAL(10,2),              -- Montant de la remise
+    FOREIGN KEY (PanierID) REFERENCES Panier(PanierID) ON DELETE CASCADE
+);
+
+CREATE TABLE Remise_Enchere (
+    RemiseID INT AUTO_INCREMENT PRIMARY KEY,  -- Identifiant unique de la remise
+    PanierID INT,                             -- Identifiant du panier associé à la remise
+    DifferencePrix DECIMAL(10,2),             -- Différence de prix entre BidAmount et Price
+    FOREIGN KEY (PanierID) REFERENCES Panier(PanierID) ON DELETE CASCADE
+);
