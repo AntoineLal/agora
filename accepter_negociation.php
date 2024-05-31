@@ -4,15 +4,15 @@ include 'config.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $negociation_id = $_POST['negociation_id'];
-    $user_id = $_SESSION['user_id'];
 
-    // Récupérer les détails de la négociation, y compris le prix négocié
-    $negociation_query = "SELECT ArticleID, ProposedPrice FROM Negociations WHERE NegociationID = $negociation_id";
+    // Récupérer les détails de la négociation, y compris le prix négocié et l'utilisateur qui a initié la négociation
+    $negociation_query = "SELECT ArticleID, ProposedPrice, UserID FROM Negociations WHERE NegociationID = $negociation_id";
     $negociation_result = $conn->query($negociation_query);
     if ($negociation_result->num_rows > 0) {
         $negociation_row = $negociation_result->fetch_assoc();
         $article_id = $negociation_row['ArticleID'];
         $proposed_price = $negociation_row['ProposedPrice'];
+        $buyer_id = $negociation_row['UserID'];  // ID de l'utilisateur qui a initié la négociation
 
         // Mettre à jour l'état de la négociation en "Accepted"
         $update_query = "UPDATE Negociations SET Status = 'Accepted' WHERE NegociationID = $negociation_id";
@@ -21,17 +21,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         }
 
-        // Vérifier si l'utilisateur a déjà un panier en cours
-        $panier_id_query = "SELECT PanierID FROM Panier WHERE UserID = $user_id AND Status = 'En cours'";
+        // Vérifier si l'acheteur a déjà un panier en cours
+        $panier_id_query = "SELECT PanierID FROM Panier WHERE UserID = $buyer_id AND Status = 'En cours'";
         $panier_id_result = $conn->query($panier_id_query);
 
         if ($panier_id_result->num_rows > 0) {
-            // Utilisateur a déjà un panier en cours, récupérer le PanierID
+            // L'acheteur a déjà un panier en cours, récupérer le PanierID
             $panier_row = $panier_id_result->fetch_assoc();
             $panier_id = $panier_row['PanierID'];
         } else {
-            // Créer un nouveau panier pour l'utilisateur
-            $insert_panier_query = "INSERT INTO Panier (UserID, Status) VALUES ($user_id, 'En cours')";
+            // Créer un nouveau panier pour l'acheteur
+            $insert_panier_query = "INSERT INTO Panier (UserID, Status) VALUES ($buyer_id, 'En cours')";
             if ($conn->query($insert_panier_query) !== TRUE) {
                 echo "Erreur lors de la création du panier : " . $conn->error;
                 exit();

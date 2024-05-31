@@ -41,7 +41,7 @@ include 'config.php';
     <a href="#notifications">Notifications</a>
 
     <?php if (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'buyer'): ?>
-        <a href="#panier.php">Panier</a>
+        <a href="panier.php">Panier</a>
     <?php elseif (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'seller'): ?>
         <a href="offres.php">Mes Offres</a>
     <?php elseif (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'admin'): ?>
@@ -68,7 +68,7 @@ include 'config.php';
             INNER JOIN Articles A ON N.ArticleID = A.ArticleID
             WHERE A.UserID = $user_id";
     $result = $conn->query($sql);
-       
+
     if ($result->num_rows > 0) {
         echo "<h2>Notifications de Négociation</h2>";
         echo "<table>";
@@ -76,6 +76,7 @@ include 'config.php';
         if ($user_type === 'seller') {
             echo "<th>Action</th>";
         }
+        echo "<th>Supprimer</th>";
         echo "</tr>";
 
         while ($row = $result->fetch_assoc()) {
@@ -86,17 +87,25 @@ include 'config.php';
             if ($user_type === 'seller') {
                 echo "<td>";
                 if ($row["Status"] === 'Pending') {
-                    echo '<form action="accepter_negociation.php" method="POST">';
+                    echo '<form action="accepter_negociation.php" method="POST" style="display:inline;">';
                     echo '<input type="hidden" name="negociation_id" value="' . $row["NegociationID"] . '">';
                     echo '<input type="submit" name="accepter" value="Accepter">';
                     echo '</form>';
-                    echo '<form action="refuser_negociation.php" method="POST">';
+                    echo '<form action="refuser_negociation.php" method="POST" style="display:inline;">';
                     echo '<input type="hidden" name="negociation_id" value="' . $row["NegociationID"] . '">';
                     echo '<input type="submit" name="refuser" value="Refuser">';
                     echo '</form>';
                 }
                 echo "</td>";
             }
+            echo '<td>';
+            if ($row["Status"] !== 'Pending') {
+                echo '<form action="supprimer_negociation.php" method="POST">';
+                echo '<input type="hidden" name="negociation_id" value="' . $row["NegociationID"] . '">';
+                echo '<input type="submit" name="supprimer" value="Supprimer">';
+                echo '</form>';
+            }
+            echo '</td>';
             echo "</tr>";
         }
 
