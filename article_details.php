@@ -34,8 +34,23 @@
     <a href="accueil.php">Accueil</a>
     <a href="toutAfficher.php">Tout Parcourir</a>
     <a href="#notifications">Notifications</a>
-    <a href="panier.php">Panier</a>
-    <a href="compte.html">Votre Compte</a>
+
+    <?php if (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'buyer'): ?>
+        <a href="#panier.php">Panier</a>
+    <?php elseif (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'seller'): ?>
+        <a href="offres.php">Mes Offres</a>
+    <?php elseif (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'admin'): ?>
+        <a href="gestion.php">Gestion</a>
+    <?php endif; ?>
+
+    <?php if (isset($_SESSION['user_id'])): ?>
+        <a href="moncompte.php" style="display: inline-block; margin: 0; padding: 0;">
+    <img src="<?php echo htmlspecialchars($_SESSION['UserImageURL']); ?>" alt="Image de profil" style="max-width: 120px; max-height: 60px; margin: 0; padding: 0; border: none;"></a>
+        <a href="logout.php">déconnexion</a>
+
+    <?php else: ?>
+        <a href="login.html">Se connecter</a>
+    <?php endif; ?>
 </nav>
 <div class="content">
     <h2>Détails de l'article</h2>
@@ -99,13 +114,13 @@
     $conn->close();
     ?>
 </div>
-<footer id="footer">
+<div id="footer">
     <p>&copy; 2024 Agora Francia. Tous droits réservés.</p>
     <p>
-        <a href="#mentions-legales">Mentions légales</a> |
-        <a href="#politique-confidentialite">Politique de confidentialité</a> |
-        <a href="#contact">Contact</a>
+        <a href="mentions-legales.html">Mentions légales</a> |
+        <a href="confidentialie.html">Politique de confidentialité</a> |
+        <a href="mailto:agora78@gmail.com">Contact</a>
     </p>
-</footer>
+</div>
 </body>
 </html>

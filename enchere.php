@@ -68,7 +68,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("dii", $new_bid_amount, $user_id, $article_id);
         if ($stmt->execute()) {
-            echo "Enchère placée avec succès.";
             $current_bid = $new_bid_amount;
             $last_bid_user_id = $user_id;
         } else {
@@ -121,8 +120,23 @@ $conn->close();
     <a href="accueil.php">Accueil</a>
     <a href="toutAfficher.php">Tout Parcourir</a>
     <a href="#notifications">Notifications</a>
-    <a href="panier.php">Panier</a>
-    <a href="compte.html">Votre Compte</a>
+
+    <?php if (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'buyer'): ?>
+        <a href="#panier.php">Panier</a>
+    <?php elseif (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'seller'): ?>
+        <a href="offres.php">Mes Offres</a>
+    <?php elseif (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'admin'): ?>
+        <a href="gestion.php">Gestion</a>
+    <?php endif; ?>
+
+    <?php if (isset($_SESSION['user_id'])): ?>
+        <a href="moncompte.php" style="display: inline-block; margin: 0; padding: 0;">
+    <img src="<?php echo htmlspecialchars($_SESSION['UserImageURL']); ?>" alt="Image de profil" style="max-width: 120px; max-height: 60px; margin: 0; padding: 0; border: none;"></a>
+        <a href="logout.php">déconnexion</a>
+
+    <?php else: ?>
+        <a href="login.html">Se connecter</a>
+    <?php endif; ?>
 </nav>
 <div class="content">
     <h2><?php echo htmlspecialchars($article['ArticleName']); ?></h2>
@@ -140,7 +154,7 @@ $conn->close();
             <form action="enchere.php?article_id=<?php echo $article_id; ?>" method="post">
                 <div class="bid-buttons">
                     <?php
-                    for ($i = 10; $i <= 100; $i += 10) {
+                    for ($i = 5; $i <= 100; $i += 5) {
                         $increment = $i / 100;
                         echo '<button type="submit" name="increment" value="' . $increment . '">+' . $i . '%</button>';
                     }
@@ -150,13 +164,13 @@ $conn->close();
         </div>
     </div>
 </div>
-<footer id="footer">
-    <p>&copy; 2024 Agora Francia. Tous droits réservés.</p>
-    <p>
-        <a href="#mentions-legales">Mentions légales</a> |
-        <a href="#politique-confidentialite">Politique de confidentialité</a> |
-        <a href="#contact">Contact</a>
-    </p>
-</footer>
+<div id="footer">
+  <p>&copy; 2024 Agora Francia. Tous droits réservés.</p>
+  <p>
+      <a href="mentions-legales.html">Mentions légales</a> |
+      <a href="confidentialie.html">Politique de confidentialité</a> |
+      <a href="mailto:agora78@gmail.com">Contact</a>
+  </p>
+</div>
 </body>
 </html>
