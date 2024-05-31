@@ -8,8 +8,54 @@ CREATE TABLE Users (
     Email VARCHAR(100) NOT NULL UNIQUE,
     UserPassword VARCHAR(255) NOT NULL,
     UserType VARCHAR(50) NOT NULL, -- Admin Seller Buyer
-    UserImageURL VARCHAR(255) -- Ajout de la colonne pour l'image de l'utilisateur
+    UserImageURL VARCHAR(255), -- Ajout de la colonne pour l'image de l'utilisateur
+    Adresse VARCHAR(255), -- Ajout de la colonne pour l'adresse de l'utilisateur
+    CarteCredit VARCHAR(20), -- Ajout de la colonne pour le numéro de carte de crédit de l'utilisateur
+    DateExpiration DATE, -- Ajout de la colonne pour la date d'expiration de la carte de crédit
+    CodeSecurite INT(3) -- Ajout de la colonne pour le code de sécurité de la carte de crédit
 );
+
+-- Utilisateur administrateur
+INSERT INTO Users (UserName, Email, UserPassword, UserType, Adresse, CarteCredit, DateExpiration, CodeSecurite)
+VALUES ('admin', 'admin@example.com', 'password', 'admin', '123 Rue de l\'Admin', '1234567890123456', '2024-12-31', '123');
+
+-- Vendeur 1
+INSERT INTO Users (UserName, Email, UserPassword, UserType, Adresse, CarteCredit, DateExpiration, CodeSecurite)
+VALUES ('vendeur1', 'vendeur1@example.com', 'password', 'seller', '456 Avenue du Vendeur', '9876543210987654', '2025-06-30', '456');
+
+-- Acheteur 1
+INSERT INTO Users (UserName, Email, UserPassword, UserType, Adresse, CarteCredit, DateExpiration, CodeSecurite)
+VALUES ('acheteur1', 'acheteur1@example.com', 'password', 'buyer', '789 Boulevard de l\'Acheteur', '1111222233334444', '2023-09-30', '789');
+
+-- Vendeur 2
+INSERT INTO Users (UserName, Email, UserPassword, UserType, Adresse, CarteCredit, DateExpiration, CodeSecurite)
+VALUES ('seller2', 'seller2@example.com', 'password', 'seller', '321 Rue du Vendeur', '2222333344445555', '2024-07-31', '246');
+
+-- Acheteur 2
+INSERT INTO Users (UserName, Email, UserPassword, UserType, Adresse, CarteCredit, DateExpiration, CodeSecurite)
+VALUES ('buyer2', 'buyer2@example.com', 'password', 'buyer', '654 Avenue de l\'Acheteur', '5555666677778888', '2025-03-31', '135');
+
+-- Vendeur 3
+INSERT INTO Users (UserName, Email, UserPassword, UserType, Adresse, CarteCredit, DateExpiration, CodeSecurite)
+VALUES ('seller3', 'seller3@example.com', 'password', 'seller', '987 Boulevard du Vendeur', '6666777788889999', '2023-11-30', '579');
+
+-- Acheteur 3
+INSERT INTO Users (UserName, Email, UserPassword, UserType, Adresse, CarteCredit, DateExpiration, CodeSecurite)
+VALUES ('buyer3', 'buyer3@example.com', 'password', 'buyer', '123 Rue de l\'Acheteur', '9999888877776666', '2024-05-31', '246');
+
+-- Vendeur 4
+INSERT INTO Users (UserName, Email, UserPassword, UserType, Adresse, CarteCredit, DateExpiration, CodeSecurite)
+VALUES ('seller4', 'seller4@example.com', 'password', 'seller', '456 Avenue du Vendeur', '3333444455556666', '2025-01-31', '891');
+
+-- Acheteur 4
+INSERT INTO Users (UserName, Email, UserPassword, UserType, Adresse, CarteCredit, DateExpiration, CodeSecurite)
+VALUES ('buyer4', 'buyer4@example.com', 'password', 'buyer', '789 Boulevard de l\'Acheteur', '7777666655554444', '2023-10-31', '123');
+
+-- Vendeur 5
+INSERT INTO Users (UserName, Email, UserPassword, UserType, Adresse, CarteCredit, DateExpiration, CodeSecurite)
+VALUES ('seller5', 'seller5@example.com', 'password', 'seller', '321 Rue du Vendeur', '4444555566667777', '2024-08-31', '357');
+
+    
 
 -- Créer la table Articles
 CREATE TABLE Articles (
@@ -28,11 +74,6 @@ CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,                    
 FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
-INSERT INTO `agora`.`Users` (`UserName`, `Email`, `UserPassword`, `UserType`)
-VALUES
-('antoine', 'antoine.lallement@edu.ece.fr', 'chaville', 'Admin'),
-('jules', 'jules.kounde@edu.ece.fr', 'foot', 'Seller');
-
 
 INSERT INTO agora.Articles (ArticleName, Description, TypeVente, Price, ImageURL, VideoURL, Quality, Stock, UserID, ItemType, CreatedAt, UpdatedAt) 
 VALUES 
@@ -144,3 +185,18 @@ CREATE TABLE Negociations (
     FOREIGN KEY (ArticleID) REFERENCES Articles(ArticleID),
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
+
+CREATE TABLE Remises (
+    RemiseID INT AUTO_INCREMENT PRIMARY KEY,  -- Identifiant unique de la remise
+    PanierID INT,                             -- Identifiant du panier associé à la remise
+    MontantRemise DECIMAL(10,2),              -- Montant de la remise
+    FOREIGN KEY (PanierID) REFERENCES Panier(PanierID) ON DELETE CASCADE
+);
+
+CREATE TABLE Remise_Enchere (
+    RemiseID INT AUTO_INCREMENT PRIMARY KEY,  -- Identifiant unique de la remise
+    PanierID INT,                             -- Identifiant du panier associé à la remise
+    DifferencePrix DECIMAL(10,2),             -- Différence de prix entre BidAmount et Price
+    FOREIGN KEY (PanierID) REFERENCES Panier(PanierID) ON DELETE CASCADE
+);
+

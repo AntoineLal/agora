@@ -14,9 +14,10 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 
 // Récupérer les articles du panier de l'utilisateur à partir de la base de données
-$sql = "SELECT Articles.*, PanierArticles.Quantity FROM Articles 
+$sql = "SELECT Articles.*, PanierArticles.Quantity, Enchere.BidAmount FROM Articles 
         INNER JOIN PanierArticles ON Articles.ArticleID = PanierArticles.ArticleID 
         INNER JOIN Panier ON Panier.PanierID = PanierArticles.PanierID
+        LEFT JOIN Enchere ON Articles.ArticleID = Enchere.ArticleID
         WHERE Panier.UserID = $user_id";
 
 $result = $conn->query($sql);
@@ -28,8 +29,8 @@ $total = 0; // Initialiser le total à zéro
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $panier_items[] = $row;
-        // Ajouter le prix total de chaque article au total
-        $total += $row['Price'] * $row['Quantity'];
+        // Si BidAmount est disponible, utilisez-le pour calculer le total, sinon utilisez le prix normal de l'article
+        $total += isset($row['BidAmount']) ? $row['BidAmount'] * $row['Quantity'] : $row['Price'] * $row['Quantity'];
     }
 }
 
@@ -83,17 +84,17 @@ if ($remise_result->num_rows > 0) {
         <h2>Votre Panier</h2>
         <div class="panier-items">
         <?php foreach ($panier_items as $item): ?>
-            <div class="item">
-                <h3><a href="article_details.php?article_id=<?php echo $item['ArticleID']; ?>"><?php echo htmlspecialchars($item['ArticleName']); ?></a></h3>
+                    <div class="item">
+                        <h3><a href="article_details.php?article_id=<?php echo $item['ArticleID']; ?>"><?php echo htmlspecialchars($item['ArticleName']); ?></a></h3>
                 <img src="<?php echo htmlspecialchars($item['ImageURL']); ?>" alt="<?php echo htmlspecialchars($item['ArticleName']); ?>" style="max-width: 150px; max-height: 150px;">
                 <p><?php echo htmlspecialchars($item['Description']); ?></p>
-                <p>Quantité : <?php echo $item['Quantity']; ?></p>
-                <p>Prix unitaire : <?php echo $item['Price']; ?> €</p>
-                <?php if ($item['TypeVente'] === 'Immediat'): ?>
-                    <form action="retirerdupanier.php" method="post">
-                        <input type="hidden" name="article_id" value="<?php echo $item['ArticleID']; ?>">
-                        <input type="submit" value="Supprimer">
-                    </form>
+                        <p>Quantité : <?php echo $item['Quantity']; ?></p>
+                        <p>Prix unitaire : <?php echo isset($item['BidAmount']) ? $item['BidAmount'] : $item['Price']; ?> €</p>
+                   <?php if ($item['TypeVente'] === 'Immediat'): ?>
+                        <form action="retirerdupanier.php" method="post">
+                            <input type="hidden" name="article_id" value="<?php echo $item['ArticleID']; ?>">
+                            <input type="submit" value="Supprimer">
+                       </form>
                 <?php endif; ?>
             </div>
         <?php endforeach; ?>
@@ -111,12 +112,12 @@ if ($remise_result->num_rows > 0) {
         </div>
     </div>
     <div id="footer">
-        <p>&copy; 2024 Agora Francia. Tous droits réservés.</p>
-        <p>
-            <a href="mentions-legales.html">Mentions légales</a> |
-            <a href="confidentialite.html">Politique de confidentialité</a> |
-            <a href="contact.php">Contact</a>
-        </p>
-    </div>
+            <p>&copy; 2024 Agora Francia. Tous droits réservés.</p>
+            <p>
+                <a href="mentions-legales.html">Mentions légales</a> |
+                <a href="confidentialite.html">Politique de confidentialité</a> |
+                <a href="contact.php">Contact</a>
+            </p>
+        </div>
 </body>
 </html>
