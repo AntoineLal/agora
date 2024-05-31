@@ -307,12 +307,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['ajouter_vendeur'])) {
 </div>
 
 <div id="footer">
-  <p>&copy; 2024 Agora Francia. Tous droits réservés.</p>
-  <p>
-      <a href="mentions-legales.html">Mentions légales</a> |
-      <a href="confidentialie.html">Politique de confidentialité</a> |
-      <a href="contact.php">Contact</a>
-  </p>
+    <p>&copy; 2024 Agora Francia. Tous droits réservés.</p>
+    <p>
+        <a href="mentions-legales.html">Mentions légales</a> |
+        <a href="confidentialite.html">Politique de confidentialité</a> |
+        <a href="contact.php">Contact</a>
+    </p>
 </div>
 
 </body>
