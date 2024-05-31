@@ -49,6 +49,12 @@
             background-image: repeating-linear-gradient(45deg, transparent, transparent 5px, #ccc 5px, #ccc 10px);
             opacity: 0.7;
         }
+        .filters {
+            margin-bottom: 20px;
+        }
+        .filter-btn {
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
@@ -64,6 +70,22 @@
 </nav>
 <div class="content">
     <h2>Tous les articles</h2>
+    <div class="filters">
+        <label for="TypeVente">Type de vente:</label>
+        <select name="TypeVente" id="TypeVente">
+            <option value="Tous">Tous</option>
+            <option value="Immediat">Immédiat</option>
+            <option value="Negociation">Négociation</option>
+            <option value="Enchere">Enchère</option>
+        </select>
+        <label for="TypeAchat">Etat de l'objet:</label>
+        <select name="TypeAchat" id="TypeAchat">
+            <option value="Tous">Tous</option>
+            <option value="Neuf">Neuf</option>
+            <option value="Occasion">Occasion</option>
+        </select>
+        <button class="filter-btn" onclick="applyFilters()">Appliquer les filtres</button>
+    </div>
     <div class="article-thumbnails">
         <?php
         // Connexion à la base de données
@@ -79,8 +101,37 @@
             die("La connexion a échoué : " . $conn->connect_error);
         }
 
-        // Requête SQL pour récupérer les informations sur les articles avec le type spécifié
-        $sql = "SELECT ArticleID, ArticleName, Description, Price, ImageURL, Stock FROM Articles WHERE TypeVente IN ('Immediat', 'Negociation', 'Enchere')";
+        // Initialiser les conditions du filtre
+        $filter_conditions = [];
+
+        // Vérifier si le type de vente est défini dans l'URL
+        if (isset($_GET['TypeVente'])) {
+            $TypeVente = $_GET['TypeVente'];
+
+            // Ajouter le type de vente à la condition du filtre
+            if ($TypeVente != 'Tous') {
+                $filter_conditions[] = "TypeVente = '$TypeVente'";
+            }
+        }
+
+        // Vérifier si le type d'achat est défini dans l'URL
+        if (isset($_GET['TypeAchat'])) {
+            $TypeAchat = $_GET['TypeAchat'];
+
+            // Ajouter le type d'achat à la condition du filtre
+            if ($TypeAchat != 'Tous') {
+                $filter_conditions[] = "Quality = '$TypeAchat'";
+            }
+        }
+
+        // Requête SQL pour récupérer les informations sur les articles avec les conditions spécifiées
+        $sql = "SELECT ArticleID, ArticleName, Description, Price, ImageURL, Stock FROM Articles";
+
+        // Ajouter les conditions au filtre
+        if (!empty($filter_conditions)) {
+            $sql .= " WHERE " . implode(" AND ", $filter_conditions);
+        }
+
         $result = $conn->query($sql);
 
         // Si des articles sont trouvés, afficher leurs vignettes
@@ -117,5 +168,12 @@
         <a href="#contact">Contact</a>
     </p>
 </footer>
+<script>
+    function applyFilters() {
+        var TypeVente = document.getElementById("TypeVente").value;
+        var TypeAchat = document.getElementById("TypeAchat").value;
+        window.location.href = "toutAfficher.php?TypeVente=" + TypeVente + "&TypeAchat=" + TypeAchat;
+    }
+</script>
 </body>
 </html>
