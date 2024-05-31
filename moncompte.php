@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['verify_password'])) {
     $entered_password = $_POST['password'];
 
     // Récupérer le mot de passe de l'utilisateur depuis la base de données
-    $sql = "SELECT UserPassword FROM Users WHERE UserID='$user_id'";
+    $sql = "SELECT UserPassword, UserName, Email, UserImageURL, Adresse, CarteCredit, DateExpiration, CodeSecurite FROM Users WHERE UserID='$user_id'";
     $result = $conn->query($sql);
 
     if ($result->num_rows == 1) {
@@ -52,9 +52,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_info'])) {
     // Récupérer les informations du formulaire
     $new_username = $_POST['username'];
     $new_email = $_POST['email'];
+    $new_credit_card = $_POST['credit_card'];
+    $new_expiry_date = $_POST['expiry_date'];
+    $new_security_code = $_POST['security_code'];
+    $new_address = $_POST['address'];
+    
+    // Gérer le téléchargement de la nouvelle image de profil
+    if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] == UPLOAD_ERR_OK) {
+        $target_dir = "images/";
+        $target_file = $target_dir . basename($_FILES["profile_image"]["name"]);
+        if (move_uploaded_file($_FILES["profile_image"]["tmp_name"], $target_file)) {
+            $new_photo = $target_file;
+        } else {
+            echo "Erreur lors du téléchargement de l'image.";
+            exit();
+        }
+    } else {
+        $new_photo = $user['UserImageURL']; // Conserver l'ancienne image si aucune nouvelle image n'est téléchargée
+    }
 
     // Mettre à jour les informations dans la base de données
-    $update_sql = "UPDATE Users SET UserName='$new_username', Email='$new_email' WHERE UserID='$user_id'";
+    $update_sql = "UPDATE Users SET UserName='$new_username', Email='$new_email', UserImageURL='$new_photo', CarteCredit='$new_credit_card', DateExpiration='$new_expiry_date', CodeSecurite='$new_security_code', Adresse='$new_address' WHERE UserID='$user_id'";
     if ($conn->query($update_sql) === TRUE) {
         // Redirection vers la page moncompte.php avec un message de succès
         header("Location: moncompte.php?success=1");
@@ -94,9 +112,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_info'])) {
 
     <?php if (isset($_SESSION['user_id'])): ?>
         <a href="moncompte.php" style="display: inline-block; margin: 0; padding: 0;">
-    <img src="<?php echo htmlspecialchars($_SESSION['UserImageURL']); ?>" alt="Image de profil" style="max-width: 120px; max-height: 60px; margin: 0; padding: 0; border: none;"></a>
-        <a href="logout.php">déconnexion</a>
-
+            <img src="<?php echo htmlspecialchars($_SESSION['UserImageURL']); ?>" alt="Image de profil" style="max-width: 120px; max-height: 60px; margin: 0; padding: 0; border: none;">
+        </a>
+        <a href="logout.php">Déconnexion</a>
     <?php else: ?>
         <a href="login.html">Se connecter</a>
     <?php endif; ?>
@@ -106,13 +124,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_info'])) {
         <!-- Formulaire pour modifier les informations du compte -->
         <form action="moncompte.php" method="post" enctype="multipart/form-data">
             <label for="username">Nom d'utilisateur:</label><br>
-            <input type="text" id="username" name="username" value="<?php echo isset($user['UserName']) ? htmlspecialchars($user['UserName']) : ''; ?>" required><br><br>
+            <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user['UserName']); ?>" required><br><br>
             
             <label for="email">Email:</label><br>
-            <input type="email" id="email" name="email" value="<?php echo isset($user['Email']) ? htmlspecialchars($user['Email']) : ''; ?>" required><br><br>
+            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['Email']); ?>" required><br><br>
             
             <label for="profile_image">Photo de profil:</label><br>
             <input type="file" id="profile_image" name="profile_image" accept="image/*"><br><br>
+            
+            <label for="credit_card">Carte de crédit:</label><br>
+            <input type="text" id="credit_card" name="credit_card" value="<?php echo htmlspecialchars($user['CarteCredit']); ?>" placeholder="Numéro de carte"><br><br>
+            
+            <label for="expiry_date">Date d'expiration:</label><br>
+            <input type="date" id="expiry_date" name="expiry_date" value="<?php echo htmlspecialchars($user['DateExpiration']); ?>"><br><br>
+            
+            <label for="security_code">Code de sécurité:</label><br>
+            <input type="text" id="security_code" name="security_code" value="<?php echo htmlspecialchars($user['CodeSecurite']); ?>" placeholder="Code de sécurité"><br><br>
+            
+            <label for="address">Adresse:</label><br>
+            <textarea id="address" name="address" rows="4" cols="50" placeholder="Votre adresse"><?php echo htmlspecialchars($user['Adresse']); ?></textarea><br><br>
             
             <input type="submit" name="update_info" value="Enregistrer les modifications">
         </form>
@@ -122,7 +152,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_info'])) {
             <label for="password">Mot de passe:</label><br>
             <input type="password" id="password" name="password" required><br>
             <span><?php echo isset($password_error) ? $password_error : ''; ?></span><br>
-            
             <input type="submit" name="verify_password" value="Vérifier le mot de passe">
         </form>
     <?php endif; ?>
