@@ -85,7 +85,7 @@ if ($result->num_rows > 0) {
     <p>
         <a href="mentions-legales.html">Mentions légales</a> |
         <a href="confidentialie.html">Politique de confidentialité</a> |
-        <a href="mailto:agora78@gmail.com">Contact</a>
+        <a href="contact.php">Contact</a>
     </p>
 </div>
 <script src="carousel.js"></script>
