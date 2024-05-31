@@ -158,3 +158,4 @@ CREATE TABLE Remise_Enchere (
     DifferencePrix DECIMAL(10,2),             -- Différence de prix entre BidAmount et Price
     FOREIGN KEY (PanierID) REFERENCES Panier(PanierID) ON DELETE CASCADE
 );
+
