@@ -63,6 +63,17 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Créer un compte - Agora Francia</title>
     <link rel="stylesheet" href="style3.css">
+    <script>
+        function showAdminCodeField() {
+            var userType = document.getElementById('usertype').value;
+            var adminCodeField = document.getElementById('adminCodeField');
+            if (userType === 'admin') {
+                adminCodeField.style.display = 'block';
+            } else {
+                adminCodeField.style.display = 'none';
+            }
+        }
+    </script>
 </head>
 <body>
     <div class="container">
@@ -98,5 +109,5 @@ $conn->close();
             <a href="login.html">Déjà un compte ? Se connecter</a>
         </div>
     </div>
-    <script>
-        function showAdminCodeField() {
+</body>
+</html>
