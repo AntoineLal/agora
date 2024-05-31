@@ -61,7 +61,17 @@ VALUES
 ('Enceinte Bluetooth', 'Enceinte Bluetooth portable avec son stereo et autonomie de 12 heures.', 'Immediat', '150.00', 'images/enceinte_bluetooth.png', NULL, 'Neuf', '50', '3', 'Articles reguliers', '2024-05-20 06:19:21', '2024-05-21 05:21:27'),
 ('Guitare Electrique', 'Guitare electrique avec ampli inclus, ideale pour les musiciens.', 'Immediat', '800.00', 'images/guitare_electrique.png', NULL, 'Neuf', '8', '2', 'Articles rares', '2024-05-20 06:19:21', '2024-05-21 05:21:27'),
 ('Lunettes de Soleil', 'Lunettes de soleil de marque avec protection UV 400.', 'Immediat', '120.00', 'images/lunettes_soleil.png', NULL, 'Neuf', '100', '4', 'Articles reguliers', '2024-05-20 06:19:21', '2024-05-21 05:21:27'),
-('Cafetiere Expresso', 'Cafetiere expresso automatique avec mousseur a lait integre.', 'Immediat', '299.99', 'images/cafetiere_expresso.png', NULL, 'Neuf', '25', '3', 'Articles reguliers', '2024-05-20 06:19:21', '2024-05-21 05:21:29');
+('Cafetiere Expresso', 'Cafetiere expresso automatique avec mousseur a lait integre.', 'Immediat', '299.99', 'images/cafetiere_expresso.png', NULL, 'Neuf', '25', '3', 'Articles reguliers', '2024-05-20 06:19:21', '2024-05-21 05:21:29'),
+('Voiture Electrique', 'Voiture electrique compacte avec une autonomie de 300 km.', 'Negociation', '19999.99', 'images/voiture_electrique.png', NULL, 'Neuf', '5', '2', 'Articles reguliers', '2024-05-20 06:19:21', '2024-05-21 05:21:27'),
+('Velo de Montagne', 'Velo de montagne tout-terrain avec suspension complete.', 'Negociation', '799.99', 'images/velo_montagne.png', NULL, 'Neuf', '10', '2', 'Articles reguliers', '2024-05-20 06:19:21', '2024-05-21 05:21:27'),
+('Ordinateur Gaming', 'Ordinateur gaming avec processeur Intel i9 et carte graphique RTX 3080.', 'Enchere', '2499.99', 'images/ordinateur_gaming.png', NULL, 'Occasion', '8', '2', 'Articles reguliers', '2024-05-20 06:19:21', '2024-05-21 05:21:27'),
+('Piano a Queue', 'Piano a queue Yamaha, ideal pour les musiciens professionnels.', 'Negociation', '8999.99', 'images/piano_queue.png', NULL, 'Occasion', '2', '2', 'Articles reguliers', '2024-05-20 06:19:21', '2024-05-21 05:21:27'),
+('Collection de Timbres', 'Collection de timbres rares du 19eme siecle.', 'Enchere', '1499.99', 'images/collection_timbres.png', NULL, 'Occasion', '1', '2', 'Articles rares', '2024-05-20 06:19:21', '2024-05-21 05:21:27'),
+('Montre de Luxe', 'Montre de luxe Patek Philippe, en or rose.', 'Negociation', '25000.00', 'images/montre_luxe.png', NULL, 'Neuf', '3', '2', 'Articles rares', '2024-05-20 06:19:21', '2024-05-21 05:21:27'),
+('Yacht de Luxe', 'Yacht de luxe avec 5 cabines et une piscine.', 'Negociation', '1500000.00', 'images/yacht_luxe.png', NULL, 'Neuf', '1', '2', 'Enchere', '2024-05-20 06:19:21', '2024-05-21 05:21:27'),
+('Bague en Diamant', 'Bague en diamant taille princesse de 2 carats.', 'Negociation', '7500.00', 'images/bague_diamant.png', NULL, 'Neuf', '5', '2', 'Articles reguliers', '2024-05-20 06:19:21', '2024-05-21 05:21:27'),
+('Sculpture en Bronze', 'Sculpture en bronze representant une scene mythologique.', 'Enchere', '4500.00', 'images/sculpture_bronze.png', NULL, 'Occasion', '1', '2', 'Articles rares', '2024-05-20 06:19:21', '2024-05-21 05:21:27');
+
 
  
 ('Tableau Le Pont Japonnais de Claude Monet', 'Tableau mythique de Claude Monet: Le Pont Japonnais', 'Enchere', '2 000 000', 'images/le_pont_japonnais.jpg', NULL, 'Occasion', '1', '2', 'Articles rares', '2024-05-20 06:19:21', '2024-05-21 05:21:27');

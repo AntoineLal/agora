@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $proposed_price = $_POST['proposed_price'];
 
     // Insérer la proposition de négociation dans la table Negociations
-    $insert_query = "INSERT INTO Negociations (ArticleID, UserID, ProposedPrice, Status) VALUES ($article_id, $user_id, $proposed_price, 'Pending')";
+    $insert_query = "INSERT INTO Negociations (ArticleID, UserID, ProposedPrice, Status) VALUES ($article_id, $user_id, $proposed_price, 'PendingSeller')";
     
     if ($conn->query($insert_query) === TRUE) {
         // Redirection vers la page des notifications
@@ -17,7 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         echo "Erreur lors de la soumission de la proposition de négociation : " . $conn->error;
     }
-    
     $conn->close();
 }
 ?>
@@ -39,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <a href="#notifications">Notifications</a>
 
     <?php if (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'buyer'): ?>
-        <a href="#panier.php">Panier</a>
+        <a href="panier.php">Panier</a>
     <?php elseif (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'seller'): ?>
         <a href="offres.php">Mes Offres</a>
     <?php elseif (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'admin'): ?>
@@ -78,8 +77,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button type="submit">Soumettre proposition</button>
         </form>
     </div>
-    <footer>
-        <p>&copy; 2024 Agora Francia. Tous droits réservés.</p>
-    </footer>
+    <div id="footer">
+    <p>&copy; 2024 Agora Francia. Tous droits réservés.</p>
+    <p>
+        <a href="mentions-legales.html">Mentions légales</a> |
+        <a href="confidentialite.html">Politique de confidentialité</a> |
+        <a href="contact.php">Contact</a>
+    </p>
+</div>
 </body>
 </html>

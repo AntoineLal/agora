@@ -46,23 +46,24 @@ if ($result->num_rows > 0) {
 
     <?php if (isset($_SESSION['user_id'])): ?>
         <a href="moncompte.php" style="display: inline-block; margin: 0; padding: 0;">
-    <img src="<?php echo htmlspecialchars($_SESSION['UserImageURL']); ?>" alt="Image de profil" style="max-width: 120px; max-height: 60px; margin: 0; padding: 0; border: none;"></a>
-        <a href="logout.php">déconnexion</a>
-
+            <img src="<?php echo htmlspecialchars($_SESSION['UserImageURL']); ?>" alt="Mon compte" style="max-width: 120px; max-height: 60px; margin: 0; padding: 0; border: none;">
+        </a>
+        <a href="logout.php">Déconnexion</a>
     <?php else: ?>
         <a href="login.html">Se connecter</a>
     <?php endif; ?>
 </nav>
 
 <div class="content">
-    <h2>Page d'accueil</h2>
+    <h2>Introduction</h2>
+    <p>Bienvenue sur Agora Francia, votre nouvelle plateforme de choix pour explorer, acheter et vendre des produits variés. Que vous soyez à la recherche de produits rares, de bonnes affaires, ou que vous souhaitiez simplement parcourir notre vaste catalogue, Agora Francia est l'endroit idéal pour vous. Profitez de notre interface intuitive et de notre communauté engagée pour une expérience de shopping en ligne incomparable.</p>
+    
     <?php if (isset($_SESSION['user_id'])): ?>
         <p>Bienvenue, <strong><?php echo htmlspecialchars($_SESSION['user_name']); ?></strong> !</p>
         <p>Email : <?php echo htmlspecialchars($_SESSION['user_email']); ?></p>
         <p>Type de compte : <?php echo htmlspecialchars($_SESSION['usertype']); ?></p>
     <?php else: ?>
-        <p>Bienvenue sur Agora Francia, votre plateforme de choix pour explorer et acheter des produits variés.</p>
-        <p>Utilisez la navigation ci-dessus pour accéder aux différentes sections de notre site.</p>
+        <p>Pour commencer, connectez-vous ou créez un compte afin de bénéficier de toutes les fonctionnalités offertes par Agora Francia. Utilisez la navigation ci-dessus pour accéder aux différentes sections de notre site.</p>
     <?php endif; ?>
 
     <h2>Articles en vente</h2>
@@ -84,7 +85,7 @@ if ($result->num_rows > 0) {
     <p>&copy; 2024 Agora Francia. Tous droits réservés.</p>
     <p>
         <a href="mentions-legales.html">Mentions légales</a> |
-        <a href="confidentialie.html">Politique de confidentialité</a> |
+        <a href="confidentialite.html">Politique de confidentialité</a> |
         <a href="contact.php">Contact</a>
     </p>
 </div>
