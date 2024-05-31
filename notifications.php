@@ -38,7 +38,7 @@ include 'config.php';
 <nav>
     <a href="accueil.php">Accueil</a>
     <a href="toutAfficher.php">Tout Parcourir</a>
-    <a href="#notifications">Notifications</a>
+    <a href="notifications.php">Notifications</a>
 
     <?php if (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'buyer'): ?>
         <a href="panier.php">Panier</a>
@@ -63,10 +63,11 @@ include 'config.php';
     $user_id = $_SESSION['user_id'];
     $user_type = $_SESSION['usertype'];
 
-    $sql = "SELECT N.NegociationID, N.ArticleID, A.ArticleName, N.ProposedPrice, N.Status
+    // Modifier la requête pour inclure à la fois les négociations où l'utilisateur est l'acheteur ou le vendeur
+    $sql = "SELECT N.NegociationID, N.ArticleID, A.ArticleName, N.ProposedPrice, N.Status, A.UserID as SellerID, N.UserID as BuyerID
             FROM Negociations N
             INNER JOIN Articles A ON N.ArticleID = A.ArticleID
-            WHERE A.UserID = $user_id";
+            WHERE N.UserID = $user_id OR A.UserID = $user_id";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -81,27 +82,33 @@ include 'config.php';
 
         while ($row = $result->fetch_assoc()) {
             echo "<tr>";
-            echo "<td>" . $row["ArticleName"] . "</td>";
-            echo "<td>" . $row["ProposedPrice"] . "€</td>";
-            echo "<td>" . $row["Status"] . "</td>";
-            if ($user_type === 'seller') {
+            echo "<td>" . htmlspecialchars($row["ArticleName"]) . "</td>";
+            echo "<td>" . htmlspecialchars($row["ProposedPrice"]) . "€</td>";
+            echo "<td>" . htmlspecialchars($row["Status"]) . "</td>";
+
+            // Afficher les actions seulement si l'utilisateur est le vendeur
+            if ($row["SellerID"] == $user_id) {
                 echo "<td>";
                 if ($row["Status"] === 'Pending') {
                     echo '<form action="accepter_negociation.php" method="POST" style="display:inline;">';
-                    echo '<input type="hidden" name="negociation_id" value="' . $row["NegociationID"] . '">';
+                    echo '<input type="hidden" name="negociation_id" value="' . htmlspecialchars($row["NegociationID"]) . '">';
                     echo '<input type="submit" name="accepter" value="Accepter">';
                     echo '</form>';
                     echo '<form action="refuser_negociation.php" method="POST" style="display:inline;">';
-                    echo '<input type="hidden" name="negociation_id" value="' . $row["NegociationID"] . '">';
+                    echo '<input type="hidden" name="negociation_id" value="' . htmlspecialchars($row["NegociationID"]) . '">';
                     echo '<input type="submit" name="refuser" value="Refuser">';
                     echo '</form>';
                 }
                 echo "</td>";
+            } else {
+                echo "<td></td>"; // Pas d'action pour l'acheteur
             }
+
+            // Permettre la suppression uniquement pour les négociations terminées
             echo '<td>';
             if ($row["Status"] !== 'Pending') {
                 echo '<form action="supprimer_negociation.php" method="POST">';
-                echo '<input type="hidden" name="negociation_id" value="' . $row["NegociationID"] . '">';
+                echo '<input type="hidden" name="negociation_id" value="' . htmlspecialchars($row["NegociationID"]) . '">';
                 echo '<input type="submit" name="supprimer" value="Supprimer">';
                 echo '</form>';
             }
