@@ -1,3 +1,7 @@
+<?php
+session_start();
+include 'config.php';
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -33,10 +37,10 @@
 <nav>
     <a href="accueil.php">Accueil</a>
     <a href="toutAfficher.php">Tout Parcourir</a>
-    <a href="#notifications">Notifications</a>
+    <a href="notifications.php">Notifications</a>
 
     <?php if (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'buyer'): ?>
-        <a href="#panier.php">Panier</a>
+        <a href="panier.php">Panier</a>
     <?php elseif (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'seller'): ?>
         <a href="offres.php">Mes Offres</a>
     <?php elseif (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'admin'): ?>

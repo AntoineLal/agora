@@ -28,10 +28,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $date_expiration = $_POST['date_expiration'];
     $code_secu = $_POST['code_secu'];
 
-    // Insérer les données de paiement dans la base de données ou les traiter selon vos besoins
-    // Par exemple, vous pouvez enregistrer les informations de paiement dans une table de commandes
-    // et effectuer d'autres opérations telles que la validation du paiement avec un service de paiement tiers.
-
     // Récupérer l'ID du panier en cours de l'utilisateur
     $panier_query = "SELECT PanierID FROM Panier WHERE UserID = $user_id AND Status = 'En cours'";
     $panier_result = $conn->query($panier_query);
@@ -39,6 +35,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($panier_result->num_rows > 0) {
         $panier_row = $panier_result->fetch_assoc();
         $panier_id = $panier_row['PanierID'];
+
+        // Récupérer les articles du panier et leurs quantités
+        $articles_query = "SELECT PA.ArticleID, PA.Quantity, A.Price
+                           FROM PanierArticles PA
+                           INNER JOIN Articles A ON PA.ArticleID = A.ArticleID
+                           WHERE PA.PanierID = $panier_id";
+        $articles_result = $conn->query($articles_query);
+
+        if ($articles_result->num_rows > 0) {
+            while ($article_row = $articles_result->fetch_assoc()) {
+                $article_id = $article_row['ArticleID'];
+                $quantity = $article_row['Quantity'];
+                $price = $article_row['Price'];
+                $total_price = $price * $quantity;
+
+                // Insérer les données dans la table Negociations
+                $sql_insert_negociation = "INSERT INTO Negociations (ArticleID, UserID, ProposedPrice, Status) VALUES ($article_id, $user_id, $total_price, 'Vendu')";
+                if ($conn->query($sql_insert_negociation) !== TRUE) {
+                    echo "Erreur lors de la création de la négociation: " . $conn->error;
+                    exit();
+                }
+            }
+        }
 
         // Supprimer les remises associées au panier
         $sql_delete_remises = "DELETE FROM Remises WHERE PanierID = $panier_id";

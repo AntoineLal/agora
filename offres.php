@@ -41,6 +41,43 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mes Offres - Agora Francia</title>
     <link rel="stylesheet" href="style1.css">
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        td img {
+            max-width: 100px;
+            max-height: 100px;
+        }
+
+        .btn {
+            padding: 8px 12px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .create-offer {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
 <header>
@@ -49,10 +86,10 @@ $conn->close();
 <nav>
     <a href="accueil.php">Accueil</a>
     <a href="toutAfficher.php">Tout Parcourir</a>
-    <a href="#notifications">Notifications</a>
+    <a href="notifications.php">Notifications</a>
 
     <?php if (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'buyer'): ?>
-        <a href="#panier.php">Panier</a>
+        <a href="panier.php">Panier</a>
     <?php elseif (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'seller'): ?>
         <a href="offres.php">Mes Offres</a>
     <?php elseif (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'admin'): ?>
@@ -70,26 +107,36 @@ $conn->close();
 </nav>
 <div class="content">
     <h2>Articles en vente</h2>
-    <div class="article-list">
-        <?php if (count($articles) > 0): ?>
+    <?php if (count($articles) > 0): ?>
+        <table>
+            <tr>
+                <th>Image</th>
+                <th>Nom de l'article</th>
+                <th>Description</th>
+                <th>Prix</th>
+                <th>Qualité</th>
+                <th>Stock</th>
+                <th>Type de vente</th>
+                <th>Type d'article</th>
+                <th>Action</th>
+            </tr>
             <?php foreach ($articles as $article): ?>
-                <div class="article-item">
-                    <h3><?php echo htmlspecialchars($article['ArticleName']); ?></h3>
-                    <img src="<?php echo htmlspecialchars($article['ImageURL']); ?>" alt="<?php echo htmlspecialchars($article['ArticleName']); ?>" style="max-width: 150px; max-height: 150px;">
-                    <p>Description : <?php echo htmlspecialchars($article['Description']); ?></p>
-                    <p>Prix : <?php echo htmlspecialchars($article['Price']); ?> €</p>
-                    <p>Qualité : <?php echo htmlspecialchars($article['Quality']); ?></p>
-                    <p>Stock : <?php echo htmlspecialchars($article['Stock']); ?></p>
-                    <p>Type de vente : <?php echo htmlspecialchars($article['TypeVente']); ?></p>
-                    <p>Type d'article : <?php echo htmlspecialchars($article['ItemType']); ?></p>
-                    <a href="modifier_article.php?id=<?php echo $article['ArticleID']; ?>" class="btn">Modifier</a>
-                </div>
-                </div>
+            <tr>
+                <td><img src="<?php echo htmlspecialchars($article['ImageURL']); ?>" alt="<?php echo htmlspecialchars($article['ArticleName']); ?>"></td>
+                <td><?php echo htmlspecialchars($article['ArticleName']); ?></td>
+                <td><?php echo htmlspecialchars($article['Description']); ?></td>
+                <td><?php echo htmlspecialchars($article['Price']); ?> €</td>
+                <td><?php echo htmlspecialchars($article['Quality']); ?></td>
+                <td><?php echo htmlspecialchars($article['Stock']); ?></td>
+                <td><?php echo htmlspecialchars($article['TypeVente']); ?></td>
+                <td><?php echo htmlspecialchars($article['ItemType']); ?></td>
+                <td><a href="modifier_article.php?id=<?php echo $article['ArticleID']; ?>" class="btn">Modifier</a></td>
+            </tr>
             <?php endforeach; ?>
-        <?php else: ?>
-            <p>Vous n'avez aucun article en vente actuellement.</p>
-        <?php endif; ?>
-    </div>
+        </table>
+    <?php else: ?>
+        <p>Vous n'avez aucun article en vente actuellement.</p>
+    <?php endif; ?>
     <div class="create-offer">
         <a href="ajouter_article.php" class="btn">Créer une nouvelle offre</a>
     </div>
