@@ -18,17 +18,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Gestion de la création de compte
         $username = $_POST['username'];
         $email = $_POST['email'];
-        $password = password_hash($_POST['password'], PASSWORD_BCRYPT); // Hachage du mot de passe
+        $password = $_POST['password'];
         $usertype = $_POST['usertype'];
         $admincode = isset($_POST['admincode']) ? $_POST['admincode'] : '';
-        $profile_image_url = $_POST['profile_image'];
+        $profile_image_url = isset($_FILES['profile_image']['name']) ? $_FILES['profile_image']['name'] : '';
 
         // Vérification du type de compte et du code admin
         if ($usertype === 'admin' && $admincode !== '0000') {
             $error_message = "Code admin incorrect.";
         } else {
             // Gestion du téléchargement de l'image
-            if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] === UPLOAD_ERR_OK) {
+            if (!empty($_FILES['profile_image']['name']) && $_FILES['profile_image']['error'] === UPLOAD_ERR_OK) {
                 $upload_dir = "images/";
                 $file_name = basename($_FILES['profile_image']['name']);
                 $file_tmp = $_FILES['profile_image']['tmp_name'];
@@ -41,26 +41,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
 
-            // Insertion dans la base de données
-            if (empty($error_message)) {
-                $sql = "INSERT INTO Users (UserName, Email, UserPassword, UserType, UserImageURL) VALUES (?, ?, ?, ?, ?)";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("sssss", $username, $email, $password, $usertype, $profile_image_url);
-                
-                if ($stmt->execute()) {
-                    $user_id = $stmt->insert_id;
-                    $_SESSION['user_id'] = $user_id;
-                    $_SESSION['user_name'] = $username;
-                    $_SESSION['user_email'] = $email;
-                    $_SESSION['usertype'] = $usertype;
-                    $success_message = "Compte créé avec succès";
-                } else {
-                    $error_message = "Erreur : " . $stmt->error;
-                }
+            // Insérer les informations du nouvel utilisateur dans la base de données
+            $sql = "INSERT INTO Users (UserName, Email, UserPassword, UserType, UserImageURL) VALUES ('$username', '$email', '$password', '$usertype', '$profile_image_url')";
+
+            if ($conn->query($sql) === TRUE) {
+                $success_message = "Compte créé avec succès.";
+            } else {
+                $error_message = "Erreur lors de la création du compte : " . $conn->error;
             }
         }
-    } else {
-        $error_message = "Veuillez remplir tous les champs.";
     }
 }
 
@@ -97,7 +86,7 @@ $conn->close();
                 <option value="seller">Vendeur</option>
                 <option value="admin">Admin</option>
             </select>
-            <div id="adminCodeField">
+            <div id="adminCodeField" style="display:none;">
                 <label for="admincode">Code Admin :</label>
                 <input type="password" id="admincode" name="admincode">
             </div>
@@ -111,17 +100,3 @@ $conn->close();
     </div>
     <script>
         function showAdminCodeField() {
-            var userType = document.getElementById('usertype').value;
-            var adminCodeField = document.getElementById('adminCodeField');
-            if (userType === 'admin') {
-                adminCodeField.style.display = 'block';
-            } else {
-                adminCodeField.style.display = 'none';
-            }
-        }
-
-        // Initialiser l'état du champ de code admin au chargement de la page
-        showAdminCodeField();
-    </script>
-</body>
-</html>
