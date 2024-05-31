@@ -82,19 +82,20 @@ if ($remise_result->num_rows > 0) {
     <div class="content">
         <h2>Votre Panier</h2>
         <div class="panier-items">
-            <?php foreach ($panier_items as $item): ?>
-                <div class="item">
-                    <h3><?php echo htmlspecialchars($item['ArticleName']); ?></h3>
-                    <p>Quantité : <?php echo $item['Quantity']; ?></p>
-                    <p>Prix unitaire : <?php echo $item['Price']; ?> €</p>
-                    <?php if ($item['TypeVente'] === 'Immediat'): ?>
-                        <form action="retirerdupanier.php" method="post">
-                            <input type="hidden" name="article_id" value="<?php echo $item['ArticleID']; ?>">
-                            <input type="submit" value="Supprimer">
-                        </form>
-                    <?php endif; ?>
-                </div>
-            <?php endforeach; ?>
+        <?php foreach ($panier_items as $item): ?>
+    <div class="item">
+        <h3><a href="article_details.php?article_id=<?php echo $item['ArticleID']; ?>"><?php echo htmlspecialchars($item['ArticleName']); ?></a></h3>
+        <p>Quantité : <?php echo $item['Quantity']; ?></p>
+        <p>Prix unitaire : <?php echo $item['Price']; ?> €</p>
+             <?php if ($item['TypeVente'] === 'Immediat'): ?>
+                <form action="retirerdupanier.php" method="post">
+                    <input type="hidden" name="article_id" value="<?php echo $item['ArticleID']; ?>">
+                    <input type="submit" value="Supprimer">
+                 </form>
+                <?php endif; ?>
+            </div>
+        <?php endforeach; ?>
+
         </div>
         <div class="total">
             <h3>Total :</h3>
