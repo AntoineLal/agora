@@ -116,7 +116,7 @@ $conn->close();
         <select id="item_type" name="item_type" required>
             <option value="Articles rares" <?php if ($article['ItemType'] == 'Articles rares') echo 'selected'; ?>>Articles rares</option>
             <option value="Articles hautes de gamme" <?php if ($article['ItemType'] == 'Articles hautes de gamme') echo 'selected'; ?>>Articles hautes de gamme</option>
-            <option value="Articles réguliers" <?php if ($article['ItemType'] == 'Articles réguliers') echo 'selected'; ?>>Articles réguliers</option>
+            <option value="Articles reguliers" <?php if ($article['ItemType'] == 'Articles réguliers') echo 'selected'; ?>>Articles réguliers</option>
         </select><br><br>
         
         <input type="submit" value="Enregistrer les modifications">

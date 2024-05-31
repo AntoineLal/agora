@@ -83,19 +83,20 @@ if ($remise_result->num_rows > 0) {
         <h2>Votre Panier</h2>
         <div class="panier-items">
         <?php foreach ($panier_items as $item): ?>
-    <div class="item">
-        <h3><a href="article_details.php?article_id=<?php echo $item['ArticleID']; ?>"><?php echo htmlspecialchars($item['ArticleName']); ?></a></h3>
-        <p>Quantité : <?php echo $item['Quantity']; ?></p>
-        <p>Prix unitaire : <?php echo $item['Price']; ?> €</p>
-             <?php if ($item['TypeVente'] === 'Immediat'): ?>
-                <form action="retirerdupanier.php" method="post">
-                    <input type="hidden" name="article_id" value="<?php echo $item['ArticleID']; ?>">
-                    <input type="submit" value="Supprimer">
-                 </form>
+            <div class="item">
+                <h3><a href="article_details.php?article_id=<?php echo $item['ArticleID']; ?>"><?php echo htmlspecialchars($item['ArticleName']); ?></a></h3>
+                <img src="<?php echo htmlspecialchars($item['ImageURL']); ?>" alt="<?php echo htmlspecialchars($item['ArticleName']); ?>" style="max-width: 150px; max-height: 150px;">
+                <p><?php echo htmlspecialchars($item['Description']); ?></p>
+                <p>Quantité : <?php echo $item['Quantity']; ?></p>
+                <p>Prix unitaire : <?php echo $item['Price']; ?> €</p>
+                <?php if ($item['TypeVente'] === 'Immediat'): ?>
+                    <form action="retirerdupanier.php" method="post">
+                        <input type="hidden" name="article_id" value="<?php echo $item['ArticleID']; ?>">
+                        <input type="submit" value="Supprimer">
+                    </form>
                 <?php endif; ?>
             </div>
         <?php endforeach; ?>
-
         </div>
         <div class="total">
             <h3>Total :</h3>
@@ -110,12 +111,12 @@ if ($remise_result->num_rows > 0) {
         </div>
     </div>
     <div id="footer">
-    <p>&copy; 2024 Agora Francia. Tous droits réservés.</p>
-    <p>
-        <a href="mentions-legales.html">Mentions légales</a> |
-        <a href="confidentialite.html">Politique de confidentialité</a> |
-        <a href="contact.php">Contact</a>
-    </p>
-</div>
+        <p>&copy; 2024 Agora Francia. Tous droits réservés.</p>
+        <p>
+            <a href="mentions-legales.html">Mentions légales</a> |
+            <a href="confidentialite.html">Politique de confidentialité</a> |
+            <a href="contact.php">Contact</a>
+        </p>
+    </div>
 </body>
 </html>

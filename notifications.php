@@ -50,7 +50,7 @@ include 'config.php';
 
     <?php if (isset($_SESSION['user_id'])): ?>
         <a href="moncompte.php" style="display: inline-block; margin: 0; padding: 0;">
-    <img src="<?php echo htmlspecialchars($_SESSION['UserImageURL']); ?>" alt="Image de profil" style="max-width: 120px; max-height: 60px; margin: 0; padding: 0; border: none;"></a>
+            <img src="<?php echo htmlspecialchars($_SESSION['UserImageURL']); ?>" alt="Image de profil" style="max-width: 120px; max-height: 60px; margin: 0; padding: 0; border: none;"></a>
         <a href="logout.php">Déconnexion</a>
     <?php else: ?>
         <a href="login.html">Se connecter</a>
@@ -63,47 +63,33 @@ include 'config.php';
     $user_type = $_SESSION['usertype'];
 
     // Modifier la requête pour inclure à la fois les négociations où l'utilisateur est l'acheteur ou le vendeur
-    $sql = "SELECT N.NegociationID, N.ArticleID, A.ArticleName, N.ProposedPrice, N.Status, N.EtapeNego, A.UserID as SellerID, N.UserID as BuyerID
-            FROM Negociations N
-            INNER JOIN Articles A ON N.ArticleID = A.ArticleID
-            WHERE N.UserID = $user_id OR A.UserID = $user_id";
+    $sql = "SELECT N.NotificationID, N.TypeVente, N.TypeAchat, N.Rarete, N.Quantity, N.CreatedAt, 
+            N.Quantity <> IFNULL(NEWARTICLES.ArticleCount, 0) AS QuantityChanged
+            FROM notifications N
+            LEFT JOIN (
+                SELECT TypeVente, Quality, ItemType, COUNT(*) AS ArticleCount
+                FROM Articles
+                GROUP BY TypeVente, Quality, ItemType
+            ) AS NEWARTICLES ON N.TypeVente = NEWARTICLES.TypeVente AND N.TypeAchat = NEWARTICLES.Quality AND N.Rarete = NEWARTICLES.ItemType
+            WHERE N.UserID = $user_id";
+
     $result = $conn->query($sql);
 
-    if ($result->num_rows > 0) {
+    if (!$result) {
+        echo "Erreur MySQL: " . $conn->error;
+    } elseif ($result->num_rows > 0) {
         echo "<h2>Notifications de Négociation</h2>";
         echo "<table>";
-        echo "<tr><th>Article</th><th>Prix Proposé</th><th>État</th>";
-        echo "<th>Action</th>";
-        echo "</tr>";
+        echo "<tr><th>Type de Vente</th><th>Type d'Achat</th><th>Rareté</th><th>Quantité</th><th>Date de Création</th><th>Changement de Quantité</th></tr>";
 
         while ($row = $result->fetch_assoc()) {
             echo "<tr>";
-            echo "<td>" . htmlspecialchars($row["ArticleName"]) . "</td>";
-            echo "<td>" . htmlspecialchars($row["ProposedPrice"]) . "€</td>";
-            echo "<td>" . htmlspecialchars($row["Status"]) . "</td>";
-
-            // Afficher les actions si l'utilisateur doit répondre à la négociation
-            echo "<td>";
-            if (($row["Status"] === 'PendingSeller' && $row["SellerID"] == $user_id) || ($row["Status"] === 'PendingBuyer' && $row["BuyerID"] == $user_id)) {
-                    echo '<form action="accepter_negociation.php" method="POST" style="display:inline;">';
-                    echo '<input type="hidden" name="negociation_id" value="' . htmlspecialchars($row["NegociationID"]) . '">';
-                    echo '<input type="submit" name="accepter" value="Accepter">';
-                    echo '</form>';
-                    echo '<form action="refuser_negociation.php" method="POST" style="display:inline;">';
-                    echo '<input type="hidden" name="negociation_id" value="' . htmlspecialchars($row["NegociationID"]) . '">';
-                    echo '<input type="submit" name="refuser" value="Refuser">';
-                    echo '</form>';
-                if ($row["EtapeNego"] <= 5) {
-                    echo '<form action="contre_offre.php" method="POST" style="display:inline;">';
-                    echo '<input type="hidden" name="negociation_id" value="' . htmlspecialchars($row["NegociationID"]) . '">';
-                    echo '<input type="number" name="nouveau_prix" step="0.01" min="0" placeholder="Nouveau Prix">';
-                    echo '<input type="submit" name="contre_offre" value="Contre-offre">';
-                    echo '</form>';
-                } else {
-                    echo "Le nombre maximal d'étapes de négociation est atteint.";
-                }
-            }
-            echo "</td>";
+            echo "<td>" . htmlspecialchars($row["TypeVente"]) . "</td>";
+            echo "<td>" . htmlspecialchars($row["TypeAchat"]) . "</td>";
+            echo "<td>" . htmlspecialchars($row["Rarete"]) . "</td>";
+            echo "<td>" . htmlspecialchars($row["Quantity"]) . "</td>";
+            echo "<td>" . htmlspecialchars($row["CreatedAt"]) . "</td>";
+            echo "<td>" . ($row["QuantityChanged"] ? "Oui" : "Non") . "</td>";
             echo "</tr>";
         }
 

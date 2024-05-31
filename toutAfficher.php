@@ -60,6 +60,7 @@ include 'config.php';
             margin-left: 10px;
         }
         </style>
+        
 </head>
 <body>
 <header>
@@ -111,6 +112,7 @@ include 'config.php';
             <option value="Articles hautes de gamme">Articles hautes de gamme</option>
         </select>
         <button class="filter-btn" onclick="applyFilters()">Appliquer les filtres</button>
+        <button class="filter-btn" onclick="createNotification()">Créer notif</button>
     </div>
     <div class="article-thumbnails">
         <?php
@@ -205,12 +207,21 @@ include 'config.php';
     </p>
 </footer>
 <script>
-    function applyFilters() {
-        var TypeVente = document.getElementById("TypeVente").value;
-        var TypeAchat = document.getElementById("TypeAchat").value;
-        var Rarete = document.getElementById("Rarete").value;
-        window.location.href = "toutAfficher.php?TypeVente=" + TypeVente + "&TypeAchat=" + TypeAchat + "&Rarete=" + Rarete;
-    }
+function applyFilters() {
+    var TypeVente = document.getElementById("TypeVente").value;
+    var TypeAchat = document.getElementById("TypeAchat").value;
+    var Rarete = document.getElementById("Rarete").value;
+    window.location.href = "toutAfficher.php?TypeVente=" + TypeVente + "&TypeAchat=" + TypeAchat + "&Rarete=" + Rarete;
+}
+
+function createNotification() {
+    var TypeVente = document.getElementById("TypeVente").value;
+    var TypeAchat = document.getElementById("TypeAchat").value;
+    var Rarete = document.getElementById("Rarete").value;
+    
+    // Rediriger vers create_notification.php avec les filtres comme paramètres GET
+    window.location.href = "create_notification.php?TypeVente=" + TypeVente + "&TypeAchat=" + TypeAchat + "&Rarete=" + Rarete;
+}
 </script>
 </body>
 </html>
