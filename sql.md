@@ -109,3 +109,38 @@ INSERT INTO Users (UserName, Email, UserPassword, UserType, UserImageURL) VALUES
 ('Heidi', 'heidi@example.com', 'password8', 'seller', 'images/user8.jpg'),
 ('Ivan', 'ivan@example.com', 'password9', 'buyer', 'images/user9.jpg'),
 ('Judy', 'judy@example.com', 'password10', 'admin', 'images/user10.jpg');
+
+
+-- Supprimer les tables existantes si elles existent
+DROP TABLE IF EXISTS Panier;
+DROP TABLE IF EXISTS PanierArticles;
+
+-- Créer la table Panier
+CREATE TABLE Panier (
+    PanierID INT AUTO_INCREMENT PRIMARY KEY,        -- Identifiant unique du panier
+    UserID INT,                                     -- Identifiant de l'utilisateur qui possède le panier
+    DateCreation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Date et heure de création du panier
+    Status ENUM('En cours', 'Validé', 'Annulé') DEFAULT 'En cours',  -- Statut du panier
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)   -- Clé étrangère vers la table Users
+);
+
+-- Créer la table PanierArticles pour lier les articles au panier
+CREATE TABLE PanierArticles (
+    PanierArticleID INT AUTO_INCREMENT PRIMARY KEY,  -- Identifiant unique de l'association panier-article
+    PanierID INT,                                    -- Identifiant du panier
+    ArticleID INT,                                   -- Identifiant de l'article
+    Quantity INT NOT NULL DEFAULT 1,                 -- Quantité de l'article dans le panier
+    FOREIGN KEY (PanierID) REFERENCES Panier(PanierID) ON DELETE CASCADE,  -- Clé étrangère vers la table Panier
+    FOREIGN KEY (ArticleID) REFERENCES Articles(ArticleID) ON DELETE CASCADE  -- Clé étrangère vers la table Articles
+);
+
+CREATE TABLE Negociations (
+    NegociationID INT AUTO_INCREMENT PRIMARY KEY,
+    ArticleID INT,
+    UserID INT,
+    ProposedPrice DECIMAL(10, 2),
+    Status ENUM('Pending', 'Accepted', 'Rejected') DEFAULT 'Pending',
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (ArticleID) REFERENCES Articles(ArticleID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+);
