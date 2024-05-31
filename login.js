@@ -1,22 +1,17 @@
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        var formData = new FormData(document.getElementById('loginForm'));
-        fetch('traitement.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.text())
-        .then(data => {
-            if (data === "Connecté avec succès") {
-                alert("Connexion réussie");
-                window.location.href = 'accueil.php';
-            } else {
-                alert(data);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    });
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    // Empêcher l'envoi du formulaire par défaut
+    e.preventDefault();
+
+    // Récupérer les valeurs des champs
+    var email = document.getElementById('email').value;
+    var password = document.getElementById('password').value;
+
+    // Vérifier si les champs ne sont pas vides 
+    if (email && password) {
+        // Envoyer les données du formulaire au serveur
+        this.submit();
+    } else {
+        // Afficher un message d'erreur si des champs sont vides
+        alert('Veuillez remplir tous les champs.');
+    }
 });

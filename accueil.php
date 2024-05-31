@@ -35,18 +35,31 @@ if ($result->num_rows > 0) {
     <a href="accueil.php">Accueil</a>
     <a href="toutAfficher.php">Tout Parcourir</a>
     <a href="#notifications">Notifications</a>
-    <a href="#panier">Panier</a>
+
+    <?php if (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'buyer'): ?>
+        <a href="#panier.php">Panier</a>
+    <?php elseif (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'seller'): ?>
+        <a href="offres.php">Mes Offres</a>
+    <?php elseif (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'admin'): ?>
+        <a href="gestion.php">Gestion</a>
+    <?php endif; ?>
+
     <?php if (isset($_SESSION['user_id'])): ?>
-        <a href="logout.php">Se déconnecter</a>
+        <a href="moncompte.php" style="display: inline-block; margin: 0; padding: 0;">
+    <img src="<?php echo htmlspecialchars($_SESSION['UserImageURL']); ?>" alt="Image de profil" style="max-width: 120px; max-height: 60px; margin: 0; padding: 0; border: none;"></a>
+        <a href="logout.php">déconnexion</a>
+
     <?php else: ?>
-        <a href="login.html">Votre Compte</a>
+        <a href="login.html">Se connecter</a>
     <?php endif; ?>
 </nav>
+
 <div class="content">
     <h2>Page d'accueil</h2>
     <?php if (isset($_SESSION['user_id'])): ?>
         <p>Bienvenue, <strong><?php echo htmlspecialchars($_SESSION['user_name']); ?></strong> !</p>
         <p>Email : <?php echo htmlspecialchars($_SESSION['user_email']); ?></p>
+        <p>Type de compte : <?php echo htmlspecialchars($_SESSION['usertype']); ?></p>
     <?php else: ?>
         <p>Bienvenue sur Agora Francia, votre plateforme de choix pour explorer et acheter des produits variés.</p>
         <p>Utilisez la navigation ci-dessus pour accéder aux différentes sections de notre site.</p>
@@ -71,8 +84,8 @@ if ($result->num_rows > 0) {
     <p>&copy; 2024 Agora Francia. Tous droits réservés.</p>
     <p>
         <a href="mentions-legales.html">Mentions légales</a> |
-        <a href="confidentialite.html">Politique de confidentialité</a> |
-        <a href="mailto:agora78@gmail.com">Contact</a>
+        <a href="confidentialie.html">Politique de confidentialité</a> |
+        <a href="contact.php">Contact</a>
     </p>
 </div>
 <script src="carousel.js"></script>
