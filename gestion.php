@@ -18,16 +18,27 @@ function afficherUtilisateurs($conn) {
         echo "<table>";
         echo "<tr><th>User ID</th><th>User Name</th><th>Email</th><th>User Type</th><th>Actions</th></tr>";
         while ($row = $result->fetch_assoc()) {
-            echo "<tr>";
-            echo "<td>" . htmlspecialchars($row['UserID']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['UserName']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['Email']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['UserType']) . "</td>";
-            echo "<td><form action='supprimer_utilisateur.php' method='post'>";
-            echo "<input type='hidden' name='user_id' value='" . htmlspecialchars($row['UserID']) . "'>";
-            echo "<input type='submit' value='Supprimer'>";
-            echo "</form></td>";
-            echo "</tr>";
+            // Vérifier si l'utilisateur est un administrateur
+            if ($row['UserType'] !== 'admin') {
+                echo "<tr>";
+                echo "<td>" . htmlspecialchars($row['UserID']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['UserName']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['Email']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['UserType']) . "</td>";
+                echo "<td><form action='supprimer_utilisateur.php' method='post'>";
+                echo "<input type='hidden' name='user_id' value='" . htmlspecialchars($row['UserID']) . "'>";
+                echo "<input type='submit' value='Supprimer'>";
+                echo "</form></td>";
+                echo "</tr>";
+            } else {
+                echo "<tr>";
+                echo "<td>" . htmlspecialchars($row['UserID']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['UserName']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['Email']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['UserType']) . "</td>";
+                echo "<td>Admin</td>"; // Afficher simplement "Admin" au lieu du bouton Supprimer
+                echo "</tr>";
+            }
         }
         echo "</table>";
     } else {
@@ -76,7 +87,6 @@ function afficherArticles($conn) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion - Agora Francia</title>
-    <link rel="stylesheet" href="style1.css">
     <style>
         table {
             width: 100%;
@@ -91,15 +101,40 @@ function afficherArticles($conn) {
             background-color: #f2f2f2;
         }
     </style>
+    <link rel="stylesheet" href="style1.css">
+    <style>
+        img {
+            max-width: 150px;
+            max-height: 150px;
+        }
+    </style>
 </head>
 <body>
 <header>
-    <h1>Gestion - Agora Francia</h1>
-    <nav>
-        <a href="accueil.php">Accueil</a>
-        <a href="toutAfficher.php">Tout Parcourir</a>
-        <a href="logout.php">Se déconnecter</a>
-    </nav>
+    <h1>GESTION</h1>
+</header>
+<nav>
+    <a href="accueil.php">Accueil</a>
+    <a href="toutAfficher.php">Tout Parcourir</a>
+    <a href="#notifications">Notifications</a>
+
+    <?php if (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'buyer'): ?>
+        <a href="#panier.php">Panier</a>
+    <?php elseif (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'seller'): ?>
+        <a href="offres.php">Mes Offres</a>
+    <?php elseif (isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'admin'): ?>
+        <a href="gestion.php">Gestion</a>
+    <?php endif; ?>
+
+    <?php if (isset($_SESSION['user_id'])): ?>
+        <a href="moncompte.php" style="display: inline-block; margin: 0; padding: 0;">
+    <img src="<?php echo htmlspecialchars($_SESSION['UserImageURL']); ?>" alt="Image de profil" style="max-width: 120px; max-height: 60px; margin: 0; padding: 0; border: none;"></a>
+        <a href="logout.php">déconnexion</a>
+
+    <?php else: ?>
+        <a href="login.html">Se connecter</a>
+    <?php endif; ?>
+</nav>
 </header>
 
 <div class="content">
@@ -117,6 +152,17 @@ function afficherArticles($conn) {
         afficherArticles($conn);
     }
     ?>
+
+    <h2>Ajouter un vendeur</h2>
+    <form action="ajouter_vendeur.php" method="post">
+        <label for="username">Nom d'utilisateur :</label>
+        <input type="text" id="username" name="username" required><br>
+        <label for="email">Adresse e-mail :</label>
+        <input type="email" id="email" name="email" required><br>
+        <label for="password">Mot de passe :</label>
+        <input type="password" id="password" name="password" required><br>
+        <input type="submit" value="Ajouter le vendeur">
+    </form>
 </div>
 
 <div id="footer">
